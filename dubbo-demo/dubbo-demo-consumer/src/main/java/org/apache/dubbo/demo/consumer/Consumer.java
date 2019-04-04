@@ -16,8 +16,12 @@
  */
 package org.apache.dubbo.demo.consumer;
 
+import org.apache.dubbo.common.utils.ProtobufUtil;
 import org.apache.dubbo.demo.DemoService;
 
+import org.apache.dubbo.demo.GooglePb.GooglePBRequestType;
+import org.apache.dubbo.demo.GooglePb.GooglePBResponseType;
+import org.apache.dubbo.rpc.service.GenericService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Consumer {
@@ -28,12 +32,15 @@ public class Consumer {
         System.setProperty("java.net.preferIPv4Stack", "true");
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"META-INF/spring/dubbo-demo-consumer.xml"});
         context.start();
-        DemoService demoService = (DemoService) context.getBean("demoService"); // get remote service proxy
+        GenericService demoService = (GenericService) context.getBean("demoService"); // get remote service proxy
+        GooglePBRequestType requestType = GooglePBRequestType.newBuilder().setReq("someRequest").build();
 
+        // generate by metaData
+        String pbJson = ProtobufUtil.serialize(requestType);
         while (true) {
             try {
                 Thread.sleep(1000);
-                String hello = demoService.sayHello("world"); // call remote method
+                String hello = (String) demoService.$invoke("sayHello",new String[]{GooglePBRequestType.class.getName()},new Object[]{pbJson}); // call remote method
                 System.out.println(hello); // get result
 
             } catch (Throwable throwable) {

@@ -17,17 +17,14 @@
 package org.apache.dubbo.demo.provider;
 
 import org.apache.dubbo.demo.DemoService;
-import org.apache.dubbo.rpc.RpcContext;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.apache.dubbo.demo.GooglePb.GooglePBRequestType;
+import org.apache.dubbo.demo.GooglePb.GooglePBResponseType;
 
 public class DemoServiceImpl implements DemoService {
 
     @Override
-    public String sayHello(String name) {
-        System.out.println("[" + new SimpleDateFormat("HH:mm:ss").format(new Date()) + "] Hello " + name + ", request from consumer: " + RpcContext.getContext().getRemoteAddress());
-        return "Hello " + name + ", response from provider: " + RpcContext.getContext().getLocalAddress();
+    public GooglePBResponseType sayHello(GooglePBRequestType request) {
+        GooglePBResponseType responseType = GooglePBResponseType.newBuilder().setResponse("response froem server "+request.getReq()).build();
+        return responseType;
     }
-
 }

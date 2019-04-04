@@ -30,6 +30,7 @@
 
     <!-- generate proxy for the remote service, then demoService can be used in the same way as the
     local regular interface -->
-    <dubbo:reference id="demoService" check="false" interface="org.apache.dubbo.demo.DemoService"/>
+    <dubbo:reference url ="dubbo://10.32.21.132:20880/org.apache.dubbo.demo.DemoService"
+                     id="demoService" check="false" interface="org.apache.dubbo.rpc.service.GenericService" generic="proto"/>
 
 </beans>
