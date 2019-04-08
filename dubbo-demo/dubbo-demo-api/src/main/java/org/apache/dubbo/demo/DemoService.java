@@ -18,6 +18,6 @@ package org.apache.dubbo.demo;
 
 public interface DemoService {
 
-    GooglePb.GooglePBResponseType sayHello(GooglePb.GooglePBRequestType request);
+    String sayHello(String request);
 
 }
