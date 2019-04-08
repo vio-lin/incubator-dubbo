@@ -27,18 +27,18 @@ import org.apache.dubbo.rpc.cluster.Directory;
 import org.apache.dubbo.rpc.cluster.directory.StaticDirectory;
 import org.apache.dubbo.rpc.protocol.AbstractInvoker;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -61,7 +61,7 @@ public class FailoverClusterInvokerTest {
      * @throws java.lang.Exception
      */
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         dic = mock(Directory.class);
@@ -166,7 +166,7 @@ public class FailoverClusterInvokerTest {
      * then we should reselect from the latest invokers before retry.
      */
     @Test
-    public void testInvokerDestoryAndReList() {
+    public void testInvokerDestroyAndReList() {
         final URL url = URL.valueOf("test://localhost/" + Demo.class.getName() + "?loadbalance=roundrobin&retries=" + retries);
         RpcException exception = new RpcException(RpcException.TIMEOUT_EXCEPTION);
         MockInvoker<Demo> invoker1 = new MockInvoker<Demo>(Demo.class, url);

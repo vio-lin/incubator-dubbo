@@ -16,24 +16,16 @@
  */
 package org.apache.dubbo.rpc;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.reflect.Field;
 
 /**
  * RPC Result.
  *
  * @serial Don't change the class name and properties.
  */
-public class RpcResult implements Result, Serializable {
+public class RpcResult extends AbstractResult {
 
     private static final long serialVersionUID = -6925924956850004727L;
-
-    private Object result;
-
-    private Throwable exception;
-
-    private Map<String, String> attachments = new HashMap<String, String>();
 
     public RpcResult() {
     }
@@ -43,7 +35,7 @@ public class RpcResult implements Result, Serializable {
     }
 
     public RpcResult(Throwable exception) {
-        this.exception = exception;
+        this.exception = handleStackTraceNull(exception);
     }
 
     @Override
@@ -88,7 +80,7 @@ public class RpcResult implements Result, Serializable {
     }
 
     public void setException(Throwable e) {
-        this.exception = e;
+        this.exception = handleStackTraceNull(e);
     }
 
     @Override
@@ -97,49 +89,40 @@ public class RpcResult implements Result, Serializable {
     }
 
     @Override
-    public Map<String, String> getAttachments() {
-        return attachments;
+    public String toString() {
+        return "RpcResult [result=" + result + ", exception=" + exception + "]";
     }
 
     /**
-     * Append all items from the map into the attachment, if map is empty then nothing happens
+     * we need to deal the exception whose stack trace is null.
+     * <p>
+     * see https://github.com/apache/incubator-dubbo/pull/2956
+     * and https://github.com/apache/incubator-dubbo/pull/3634
+     * and https://github.com/apache/incubator-dubbo/issues/619
      *
-     * @param map contains all key-value pairs to append
+     * @param e exception
+     * @return exception after deal with stack trace
      */
-    public void setAttachments(Map<String, String> map) {
-        this.attachments = map == null ? new HashMap<String, String>() : map;
-    }
-
-    public void addAttachments(Map<String, String> map) {
-        if (map == null) {
-            return;
+    private Throwable handleStackTraceNull(Throwable e) {
+        if (e != null) {
+            try {
+                // get Throwable class
+                Class clazz = e.getClass();
+                while (!clazz.getName().equals(Throwable.class.getName())) {
+                    clazz = clazz.getSuperclass();
+                }
+                // get stackTrace value
+                Field stackTraceField = clazz.getDeclaredField("stackTrace");
+                stackTraceField.setAccessible(true);
+                Object stackTrace = stackTraceField.get(e);
+                if (stackTrace == null) {
+                    e.setStackTrace(new StackTraceElement[0]);
+                }
+            } catch (Throwable t) {
+                // ignore
+            }
         }
-        if (this.attachments == null) {
-            this.attachments = new HashMap<String, String>();
-        }
-        this.attachments.putAll(map);
-    }
 
-    @Override
-    public String getAttachment(String key) {
-        return attachments.get(key);
-    }
-
-    @Override
-    public String getAttachment(String key, String defaultValue) {
-        String result = attachments.get(key);
-        if (result == null || result.length() == 0) {
-            result = defaultValue;
-        }
-        return result;
-    }
-
-    public void setAttachment(String key, String value) {
-        attachments.put(key, value);
-    }
-
-    @Override
-    public String toString() {
-        return "RpcResult [result=" + result + ", exception=" + exception + "]";
+        return e;
     }
 }

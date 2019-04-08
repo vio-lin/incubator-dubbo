@@ -26,10 +26,13 @@ import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.RpcInvocation;
-import org.apache.dubbo.rpc.RpcResult;
 
 /**
- * ConsumerContextInvokerFilter
+ * ConsumerContextFilter set current RpcContext with invoker,invocation, local host, remote host and port
+ * for consumer invoker.It does it to make the requires info available to execution thread's RpcContext.
+ *
+ * @see org.apache.dubbo.rpc.Filter
+ * @see RpcContext
  */
 @Activate(group = Constants.CONSUMER, order = -10000)
 public class ConsumerContextFilter implements Filter {
@@ -46,12 +49,18 @@ public class ConsumerContextFilter implements Filter {
             ((RpcInvocation) invocation).setInvoker(invoker);
         }
         try {
-            RpcResult result = (RpcResult) invoker.invoke(invocation);
-            RpcContext.getServerContext().setAttachments(result.getAttachments());
-            return result;
+            // TODO should we clear server context?
+            RpcContext.removeServerContext();
+            return invoker.invoke(invocation);
         } finally {
+            // TODO removeContext? but we need to save future for RpcContext.getFuture() API. If clear attachments here, attachments will not available when postProcessResult is invoked.
             RpcContext.getContext().clearAttachments();
         }
     }
 
+    @Override
+    public Result onResponse(Result result, Invoker<?> invoker, Invocation invocation) {
+        RpcContext.getServerContext().setAttachments(result.getAttachments());
+        return result;
+    }
 }

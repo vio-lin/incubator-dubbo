@@ -18,8 +18,8 @@ package org.apache.dubbo.rpc.protocol.dubbo;
 
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.config.ConfigurationUtils;
 import org.apache.dubbo.common.utils.AtomicPositiveInteger;
-import org.apache.dubbo.common.utils.ConfigUtils;
 import org.apache.dubbo.remoting.RemotingException;
 import org.apache.dubbo.remoting.TimeoutException;
 import org.apache.dubbo.remoting.exchange.ExchangeClient;
@@ -32,6 +32,7 @@ import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.RpcInvocation;
 import org.apache.dubbo.rpc.RpcResult;
+import org.apache.dubbo.rpc.SimpleAsyncRpcResult;
 import org.apache.dubbo.rpc.protocol.AbstractInvoker;
 import org.apache.dubbo.rpc.support.RpcUtils;
 
@@ -80,6 +81,7 @@ public class DubboInvoker<T> extends AbstractInvoker<T> {
         }
         try {
             boolean isAsync = RpcUtils.isAsync(getUrl(), invocation);
+            boolean isAsyncFuture = RpcUtils.isReturnTypeFuture(inv);
             boolean isOneway = RpcUtils.isOneway(getUrl(), invocation);
             int timeout = getUrl().getMethodParameter(methodName, Constants.TIMEOUT_KEY, Constants.DEFAULT_TIMEOUT);
             if (isOneway) {
@@ -89,13 +91,16 @@ public class DubboInvoker<T> extends AbstractInvoker<T> {
                 return new RpcResult();
             } else if (isAsync) {
                 ResponseFuture future = currentClient.request(inv, timeout);
-                FutureAdapter<T> futureAdapter = new FutureAdapter<>(future);
+                // For compatibility
+                FutureAdapter<Object> futureAdapter = new FutureAdapter<>(future);
                 RpcContext.getContext().setFuture(futureAdapter);
+
                 Result result;
-                if (RpcUtils.isAsyncFuture(getUrl(), inv)) {
-                    result = new AsyncRpcResult<>(futureAdapter);
+                if (isAsyncFuture) {
+                    // register resultCallback, sometimes we need the async result being processed by the filter chain.
+                    result = new AsyncRpcResult(futureAdapter, futureAdapter.getResultFuture(), false);
                 } else {
-                    result = new RpcResult();
+                    result = new SimpleAsyncRpcResult(futureAdapter, futureAdapter.getResultFuture(), false);
                 }
                 return result;
             } else {
@@ -111,8 +116,9 @@ public class DubboInvoker<T> extends AbstractInvoker<T> {
 
     @Override
     public boolean isAvailable() {
-        if (!super.isAvailable())
+        if (!super.isAvailable()) {
             return false;
+        }
         for (ExchangeClient client : clients) {
             if (client.isConnected() && !client.hasAttribute(Constants.CHANNEL_ATTRIBUTE_READONLY_KEY)) {
                 //cannot write == not Available ?
@@ -142,7 +148,7 @@ public class DubboInvoker<T> extends AbstractInvoker<T> {
                 }
                 for (ExchangeClient client : clients) {
                     try {
-                        client.close(ConfigUtils.getServerShutdownTimeout());
+                        client.close(ConfigurationUtils.getServerShutdownTimeout());
                     } catch (Throwable t) {
                         logger.warn(t.getMessage(), t);
                     }

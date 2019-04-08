@@ -19,7 +19,9 @@ package org.apache.dubbo.rpc;
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.threadlocal.InternalThreadLocal;
+import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.NetUtils;
+import org.apache.dubbo.common.utils.StringUtils;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -31,9 +33,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
 
 /**
  * Thread local context. (API, ThreadLocal, ThreadSafe)
@@ -50,12 +52,15 @@ public class RpcContext {
     /**
      * use internal thread local to improve performance
      */
+    // FIXME REQUEST_CONTEXT
     private static final InternalThreadLocal<RpcContext> LOCAL = new InternalThreadLocal<RpcContext>() {
         @Override
         protected RpcContext initialValue() {
             return new RpcContext();
         }
     };
+
+    // FIXME RESPONSE_CONTEXT
     private static final InternalThreadLocal<RpcContext> SERVER_LOCAL = new InternalThreadLocal<RpcContext>() {
         @Override
         protected RpcContext initialValue() {
@@ -105,6 +110,10 @@ public class RpcContext {
         return SERVER_LOCAL.get();
     }
 
+    public static void restoreServerContext(RpcContext oldServerContext) {
+        SERVER_LOCAL.set(oldServerContext);
+    }
+
     /**
      * remove server side context.
      *
@@ -123,6 +132,35 @@ public class RpcContext {
         return LOCAL.get();
     }
 
+    public static void restoreContext(RpcContext oldContext) {
+        LOCAL.set(oldContext);
+    }
+
+
+    public RpcContext copyOf() {
+        RpcContext copy = new RpcContext();
+        copy.attachments.putAll(this.attachments);
+        copy.values.putAll(this.values);
+        copy.future = this.future;
+        copy.urls = this.urls;
+        copy.url = this.url;
+        copy.methodName = this.methodName;
+        copy.parameterTypes = this.parameterTypes;
+        copy.arguments = this.arguments;
+        copy.localAddress = this.localAddress;
+        copy.remoteAddress = this.remoteAddress;
+        copy.invokers = this.invokers;
+        copy.invoker = this.invoker;
+        copy.invocation = this.invocation;
+
+        copy.request = this.request;
+        copy.response = this.response;
+        copy.asyncContext = this.asyncContext;
+
+        return copy;
+    }
+
+
     /**
      * remove context.
      *
@@ -130,23 +168,6 @@ public class RpcContext {
      */
     public static void removeContext() {
         LOCAL.remove();
-    }
-
-    /**
-     * TODO call multiple times in different thread?
-     *
-     * @return
-     * @throws IllegalStateException
-     */
-    @SuppressWarnings("unchecked")
-    public static AsyncContext startAsync() throws IllegalStateException {
-        RpcContext currentContext = getContext();
-        if (currentContext.asyncContext != null) {
-            currentContext.asyncContext.start();
-            return currentContext.asyncContext;
-        } else {
-            throw new IllegalStateException("This service does not support asynchronous operations, you should open async explicitly before use.");
-        }
     }
 
     /**
@@ -345,7 +366,7 @@ public class RpcContext {
      */
     public String getLocalHostName() {
         String host = localAddress == null ? null : localAddress.getHostName();
-        if (host == null || host.length() == 0) {
+        if (StringUtils.isEmpty(host)) {
             return getLocalHost();
         }
         return host;
@@ -585,7 +606,7 @@ public class RpcContext {
 
     public RpcContext setInvokers(List<Invoker<?>> invokers) {
         this.invokers = invokers;
-        if (invokers != null && !invokers.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(invokers)) {
             List<URL> urls = new ArrayList<URL>(invokers.size());
             for (Invoker<?> invoker : invokers) {
                 urls.add(invoker.getUrl());
@@ -636,23 +657,19 @@ public class RpcContext {
      * @return get the return result from <code>future.get()</code>
      */
     @SuppressWarnings("unchecked")
-    public <T> Future<T> asyncCall(Callable<T> callable) {
+    public <T> CompletableFuture<T> asyncCall(Callable<T> callable) {
         try {
             try {
                 setAttachment(Constants.ASYNC_KEY, Boolean.TRUE.toString());
                 final T o = callable.call();
                 //local invoke will return directly
                 if (o != null) {
-                    FutureTask<T> f = new FutureTask<T>(new Callable<T>() {
-                        @Override
-                        public T call() throws Exception {
-                            return o;
-                        }
-                    });
-                    f.run();
-                    return f;
+                    if (o instanceof CompletableFuture) {
+                        return (CompletableFuture<T>) o;
+                    }
+                    return CompletableFuture.completedFuture(o);
                 } else {
-
+                    // The service has a normal sync method signature, should get future from RpcContext.
                 }
             } catch (Exception e) {
                 throw new RpcException(e);
@@ -660,7 +677,7 @@ public class RpcContext {
                 removeAttachment(Constants.ASYNC_KEY);
             }
         } catch (final RpcException e) {
-            return new Future<T>() {
+            return new CompletableFuture<T>() {
                 @Override
                 public boolean cancel(boolean mayInterruptIfRunning) {
                     return false;
@@ -689,7 +706,7 @@ public class RpcContext {
                 }
             };
         }
-        return ((Future<T>) getContext().getFuture());
+        return ((CompletableFuture<T>) getContext().getFuture());
     }
 
     /**
@@ -709,6 +726,20 @@ public class RpcContext {
         }
     }
 
+    /**
+     * @return
+     * @throws IllegalStateException
+     */
+    @SuppressWarnings("unchecked")
+    public static AsyncContext startAsync() throws IllegalStateException {
+        RpcContext currentContext = getContext();
+        if (currentContext.asyncContext == null) {
+            currentContext.asyncContext = new AsyncContextImpl();
+        }
+        currentContext.asyncContext.start();
+        return currentContext.asyncContext;
+    }
+
     public boolean isAsyncStarted() {
         if (this.asyncContext == null) {
             return false;
@@ -717,12 +748,11 @@ public class RpcContext {
     }
 
     public boolean stopAsync() {
-        boolean stoped = asyncContext.stop();
-        asyncContext = null;
-        return stoped;
+        return asyncContext.stop();
     }
 
-    public void setAsyncContext(AsyncContext asyncContext) {
-        this.asyncContext = asyncContext;
+    public AsyncContext getAsyncContext() {
+        return asyncContext;
     }
+
 }

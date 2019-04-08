@@ -36,6 +36,7 @@ import org.apache.dubbo.remoting.transport.ChannelHandlerDelegate;
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
 
+
 /**
  * ExchangeReceiver
  */
@@ -43,9 +44,9 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
 
     protected static final Logger logger = LoggerFactory.getLogger(HeaderExchangeHandler.class);
 
-    public static String KEY_READ_TIMESTAMP = HeartbeatHandler.KEY_READ_TIMESTAMP;
+    public static final String KEY_READ_TIMESTAMP = HeartbeatHandler.KEY_READ_TIMESTAMP;
 
-    public static String KEY_WRITE_TIMESTAMP = HeartbeatHandler.KEY_WRITE_TIMESTAMP;
+    public static final String KEY_WRITE_TIMESTAMP = HeartbeatHandler.KEY_WRITE_TIMESTAMP;
 
     private final ExchangeHandler handler;
 
@@ -76,15 +77,19 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
         }
     }
 
-    void handleRequest(ExchangeChannel channel, Request req) throws RemotingException {
+    void handleRequest(final ExchangeChannel channel, Request req) throws RemotingException {
         Response res = new Response(req.getId(), req.getVersion());
         if (req.isBroken()) {
             Object data = req.getData();
 
             String msg;
-            if (data == null) msg = null;
-            else if (data instanceof Throwable) msg = StringUtils.toString((Throwable) data);
-            else msg = data.toString();
+            if (data == null) {
+                msg = null;
+            } else if (data instanceof Throwable) {
+                msg = StringUtils.toString((Throwable) data);
+            } else {
+                msg = data.toString();
+            }
             res.setErrorMessage("Fail to decode request due to: " + msg);
             res.setStatus(Response.BAD_REQUEST);
 
@@ -102,7 +107,7 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
                 channel.send(res);
                 return;
             }
-            future.whenCompleteAsync((result, t) -> {
+            future.whenComplete((result, t) -> {
                 try {
                     if (t == null) {
                         res.setStatus(Response.OK);
@@ -145,6 +150,7 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
         try {
             handler.disconnected(exchangeChannel);
         } finally {
+            DefaultFuture.closeChannel(channel);
             HeaderExchangeChannel.removeChannelIfDisconnected(channel);
         }
     }
@@ -182,7 +188,7 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
     @Override
     public void received(Channel channel, Object message) throws RemotingException {
         channel.setAttribute(KEY_READ_TIMESTAMP, System.currentTimeMillis());
-        ExchangeChannel exchangeChannel = HeaderExchangeChannel.getOrAddChannel(channel);
+        final ExchangeChannel exchangeChannel = HeaderExchangeChannel.getOrAddChannel(channel);
         try {
             if (message instanceof Request) {
                 // handle request.

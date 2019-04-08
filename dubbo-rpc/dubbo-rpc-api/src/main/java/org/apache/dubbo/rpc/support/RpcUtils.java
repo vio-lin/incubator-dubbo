@@ -18,16 +18,20 @@ package org.apache.dubbo.rpc.support;
 
 import org.apache.dubbo.common.Constants;
 import org.apache.dubbo.common.URL;
-import org.apache.dubbo.common.config.AsyncFor;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.utils.ReflectUtils;
+import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.RpcInvocation;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -44,8 +48,10 @@ public class RpcUtils {
                     && invocation.getInvoker().getUrl() != null
                     && !invocation.getMethodName().startsWith("$")) {
                 String service = invocation.getInvoker().getUrl().getServiceInterface();
-                if (service != null && service.length() > 0) {
-                    Class<?> cls = ReflectUtils.forName(service);
+                if (StringUtils.isNotEmpty(service)) {
+                    Class<?> invokerInterface = invocation.getInvoker().getInterface();
+                    Class<?> cls = invokerInterface != null ? ReflectUtils.forName(invokerInterface.getClassLoader(), service)
+                            : ReflectUtils.forName(service);
                     Method method = cls.getMethod(invocation.getMethodName(), invocation.getParameterTypes());
                     if (method.getReturnType() == void.class) {
                         return null;
@@ -59,19 +65,39 @@ public class RpcUtils {
         return null;
     }
 
+    // TODO why not get return type when initialize Invocation?
     public static Type[] getReturnTypes(Invocation invocation) {
         try {
             if (invocation != null && invocation.getInvoker() != null
                     && invocation.getInvoker().getUrl() != null
                     && !invocation.getMethodName().startsWith("$")) {
                 String service = invocation.getInvoker().getUrl().getServiceInterface();
-                if (service != null && service.length() > 0) {
-                    Class<?> cls = ReflectUtils.forName(service);
+                if (StringUtils.isNotEmpty(service)) {
+                    Class<?> invokerInterface = invocation.getInvoker().getInterface();
+                    Class<?> cls = invokerInterface != null ? ReflectUtils.forName(invokerInterface.getClassLoader(), service)
+                            : ReflectUtils.forName(service);
                     Method method = cls.getMethod(invocation.getMethodName(), invocation.getParameterTypes());
                     if (method.getReturnType() == void.class) {
                         return null;
                     }
-                    return new Type[]{method.getReturnType(), method.getGenericReturnType()};
+                    Class<?> returnType = method.getReturnType();
+                    Type genericReturnType = method.getGenericReturnType();
+                    if (Future.class.isAssignableFrom(returnType)) {
+                        if (genericReturnType instanceof ParameterizedType) {
+                            Type actualArgType = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
+                            if (actualArgType instanceof ParameterizedType) {
+                                returnType = (Class<?>) ((ParameterizedType) actualArgType).getRawType();
+                                genericReturnType = actualArgType;
+                            } else {
+                                returnType = (Class<?>) actualArgType;
+                                genericReturnType = returnType;
+                            }
+                        } else {
+                            returnType = null;
+                            genericReturnType = null;
+                        }
+                    }
+                    return new Type[]{returnType, genericReturnType};
                 }
             }
         } catch (Throwable t) {
@@ -157,13 +183,12 @@ public class RpcUtils {
         return isAsync;
     }
 
-    public static boolean isAsyncFuture(URL url, Invocation inv) {
-        return Boolean.TRUE.toString().equals(inv.getAttachment(Constants.FUTURE_KEY));
+    public static boolean isReturnTypeFuture(Invocation inv) {
+        return Boolean.TRUE.toString().equals(inv.getAttachment(Constants.FUTURE_RETURNTYPE_KEY));
     }
 
-    public static boolean isAsyncFuture(Method method) {
-        Class<?> clazz = method.getDeclaringClass();
-        return clazz.isAnnotationPresent(AsyncFor.class) && method.getName().endsWith(Constants.ASYNC_SUFFIX) && method.getReturnType().equals(CompletableFuture.class);
+    public static boolean hasFutureReturnType(Method method) {
+        return CompletableFuture.class.isAssignableFrom(method.getReturnType());
     }
 
     public static boolean isOneway(URL url, Invocation inv) {
@@ -174,6 +199,13 @@ public class RpcUtils {
             isOneway = !url.getMethodParameter(getMethodName(inv), Constants.RETURN_KEY, true);
         }
         return isOneway;
+    }
+
+    public static Map<String, String> getNecessaryAttachments(Invocation inv) {
+        Map<String, String> attachments = new HashMap<>(inv.getAttachments());
+        attachments.remove(Constants.ASYNC_KEY);
+        attachments.remove(Constants.FUTURE_GENERATED_KEY);
+        return attachments;
     }
 
 }

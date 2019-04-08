@@ -144,12 +144,11 @@ public final class JavaBeanSerializeUtil {
             }
         } else if (obj instanceof Map) {
             Map map = (Map) obj;
-            for (Object key : map.keySet()) {
-                Object value = map.get(key);
+            map.forEach((key, value) -> {
                 Object keyDescriptor = key == null ? null : createDescriptorIfAbsent(key, accessor, cache);
                 Object valueDescriptor = value == null ? null : createDescriptorIfAbsent(value, accessor, cache);
                 descriptor.setProperty(keyDescriptor, valueDescriptor);
-            } // ~ end of loop map
+            });// ~ end of loop map
         } else {
             if (JavaBeanAccessor.isAccessByMethod(accessor)) {
                 Map<String, Method> methods = ReflectUtils.getBeanPropertyReadMethods(obj.getClass());
@@ -344,7 +343,7 @@ public final class JavaBeanSerializeUtil {
         return cl.newInstance();
     }
 
-    private static Object getConstructorArg(Class<?> cl) {
+    public static Object getConstructorArg(Class<?> cl) {
         if (boolean.class.equals(cl) || Boolean.class.equals(cl)) {
             return Boolean.FALSE;
         } else if (byte.class.equals(cl) || Byte.class.equals(cl)) {
@@ -399,14 +398,16 @@ public final class JavaBeanSerializeUtil {
             }
             result = Array.newInstance(componentType, beanDescriptor.propertySize());
             cache.put(beanDescriptor, result);
-        } else try {
-            Class<?> cl = name2Class(loader, beanDescriptor.getClassName());
-            result = instantiate(cl);
-            cache.put(beanDescriptor, result);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage(), e);
+        } else {
+            try {
+                Class<?> cl = name2Class(loader, beanDescriptor.getClassName());
+                result = instantiate(cl);
+                cache.put(beanDescriptor, result);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            } catch (Exception e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
         }
 
         return result;

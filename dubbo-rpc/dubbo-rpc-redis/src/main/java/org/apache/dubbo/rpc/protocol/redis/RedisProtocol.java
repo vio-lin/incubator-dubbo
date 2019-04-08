@@ -22,6 +22,7 @@ import org.apache.dubbo.common.extension.ExtensionLoader;
 import org.apache.dubbo.common.serialize.ObjectInput;
 import org.apache.dubbo.common.serialize.ObjectOutput;
 import org.apache.dubbo.common.serialize.Serialization;
+import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.Exporter;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.Invoker;
@@ -73,24 +74,34 @@ public class RedisProtocol extends AbstractProtocol {
             config.setTestOnBorrow(url.getParameter("test.on.borrow", true));
             config.setTestOnReturn(url.getParameter("test.on.return", false));
             config.setTestWhileIdle(url.getParameter("test.while.idle", false));
-            if (url.getParameter("max.idle", 0) > 0)
+            if (url.getParameter("max.idle", 0) > 0) {
                 config.setMaxIdle(url.getParameter("max.idle", 0));
-            if (url.getParameter("min.idle", 0) > 0)
+            }
+            if (url.getParameter("min.idle", 0) > 0) {
                 config.setMinIdle(url.getParameter("min.idle", 0));
-            if (url.getParameter("max.active", 0) > 0)
+            }
+            if (url.getParameter("max.active", 0) > 0) {
                 config.setMaxTotal(url.getParameter("max.active", 0));
-            if (url.getParameter("max.total", 0) > 0)
+            }
+            if (url.getParameter("max.total", 0) > 0) {
                 config.setMaxTotal(url.getParameter("max.total", 0));
-            if (url.getParameter("max.wait", 0) > 0)
+            }
+            if (url.getParameter("max.wait", 0) > 0) {
                 config.setMaxWaitMillis(url.getParameter("max.wait", 0));
-            if (url.getParameter("num.tests.per.eviction.run", 0) > 0)
+            }
+            if (url.getParameter("num.tests.per.eviction.run", 0) > 0) {
                 config.setNumTestsPerEvictionRun(url.getParameter("num.tests.per.eviction.run", 0));
-            if (url.getParameter("time.between.eviction.runs.millis", 0) > 0)
+            }
+            if (url.getParameter("time.between.eviction.runs.millis", 0) > 0) {
                 config.setTimeBetweenEvictionRunsMillis(url.getParameter("time.between.eviction.runs.millis", 0));
-            if (url.getParameter("min.evictable.idle.time.millis", 0) > 0)
+            }
+            if (url.getParameter("min.evictable.idle.time.millis", 0) > 0) {
                 config.setMinEvictableIdleTimeMillis(url.getParameter("min.evictable.idle.time.millis", 0));
+            }
             final JedisPool jedisPool = new JedisPool(config, url.getHost(), url.getPort(DEFAULT_PORT),
-                    url.getParameter(Constants.TIMEOUT_KEY, Constants.DEFAULT_TIMEOUT));
+                    url.getParameter(Constants.TIMEOUT_KEY, Constants.DEFAULT_TIMEOUT),
+                    StringUtils.isBlank(url.getPassword()) ? null : url.getPassword(),
+                    url.getParameter("db.index", 0));
             final int expiry = url.getParameter("expiry", 0);
             final String get = url.getParameter("get", "get");
             final String set = url.getParameter("set", Map.class.equals(type) ? "put" : "set");
