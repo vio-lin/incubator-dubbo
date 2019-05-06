@@ -35,5 +35,15 @@
             <artifactId>dubbo-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <!-- do some remove -->
+        <dependency>
+            <groupId>com.ctrip.framework.cdubbo</groupId>
+            <artifactId>cdubbo-demo-api</artifactId>
+            <version>1.0-map</version>
+        </dependency>
     </dependencies>
 </project>

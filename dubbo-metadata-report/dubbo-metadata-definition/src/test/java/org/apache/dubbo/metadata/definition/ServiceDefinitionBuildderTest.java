@@ -18,10 +18,13 @@ package org.apache.dubbo.metadata.definition;
 
 import org.apache.dubbo.metadata.definition.model.FullServiceDefinition;
 import org.apache.dubbo.metadata.definition.model.MethodDefinition;
+import org.apache.dubbo.metadata.definition.model.ServiceDefinition;
 import org.apache.dubbo.metadata.definition.model.TypeDefinition;
 import org.apache.dubbo.metadata.definition.service.ComplexObject;
 import org.apache.dubbo.metadata.definition.service.DemoService;
 
+import com.ctrip.cdubbo.demo.api.CDubboGooglePBService;
+import com.ctrip.cdubbo.demo.api.googlepb.CDubboGooglePB;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +39,8 @@ public class ServiceDefinitionBuildderTest {
     @Test
     public void testBuilderComplextObject() {
         FullServiceDefinition fullServiceDefinition = ServiceDefinitionBuilder.buildFullDefinition(DemoService.class);
+        FullServiceDefinition fullServiceDefinition1 = ServiceDefinitionBuilder.buildFullDefinition(CDubboGooglePBService.class);
+        System.out.println(fullServiceDefinition1);
         checkComplextObjectAsParam(fullServiceDefinition);
     }
 
