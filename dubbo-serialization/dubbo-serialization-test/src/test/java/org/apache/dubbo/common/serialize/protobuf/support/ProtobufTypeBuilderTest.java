@@ -45,7 +45,6 @@ public class ProtobufTypeBuilderTest {
                 break;
             }
         }
-
         Map<String, TypeDefinition> propertiesMap = typeDefinition.getProperties();
         assertThat(propertiesMap.size(), is(9));
         assertThat(propertiesMap.containsKey("money"), is(true));
