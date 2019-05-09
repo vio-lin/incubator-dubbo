@@ -59,11 +59,7 @@ public class MapTypeBuilder implements TypeBuilder {
                 TypeDefinitionBuilder.build(actualType, rawType, typeCache);
             } else if (actualType instanceof Class<?>) {
                 Class<?> actualClass = (Class<?>) actualType;
-                if (actualClass.isArray() || actualClass.isEnum()) {
-                    TypeDefinitionBuilder.build(null, actualClass, typeCache);
-                } else {
-                    TypeDefinitionBuilder.build(null,actualClass, typeCache);
-                }
+                TypeDefinitionBuilder.build(null, actualClass, typeCache);
             }
         }
 

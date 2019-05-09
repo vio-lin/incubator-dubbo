@@ -42,12 +42,12 @@ public class ProtobufTypeBuilder implements TypeBuilder {
     private static final Pattern LIST_PATTERN = Pattern.compile("^java[.]util[.]List<(\\w+([.$]\\w*)+)>$");
     private static final List<String> list = null;
     /**
-     * provider a List<String> type for TypeDefinitionBuilder.build(type,class,cache)
+     * provide a List<String> type for TypeDefinitionBuilder.build(type,class,cache)
      * "repeated string" transform to ProtocolStringList, should be build as List<String> type.
      */
-    private Type STRING_LIST_TYPE;
+    private static Type STRING_LIST_TYPE;
 
-    public ProtobufTypeBuilder() {
+    static {
         try {
             STRING_LIST_TYPE = ProtobufTypeBuilder.class.getDeclaredField("list").getGenericType();
         } catch (NoSuchFieldException e) {
@@ -82,10 +82,8 @@ public class ProtobufTypeBuilder implements TypeBuilder {
     }
 
     private GeneratedMessageV3.Builder getMessageBuilder(Class<?> requestType) throws Exception {
-        GeneratedMessageV3.Builder builder;
         Method method = requestType.getMethod("newBuilder");
-        builder = (GeneratedMessageV3.Builder) method.invoke(null, null);
-        return builder;
+        return (GeneratedMessageV3.Builder) method.invoke(null, null);
     }
 
     private TypeDefinition buildProtobufTypeDefinition(Class<?> clazz, GeneratedMessageV3.Builder builder, Map<Class<?>, TypeDefinition> typeCache) {
@@ -100,39 +98,31 @@ public class ProtobufTypeBuilder implements TypeBuilder {
             String methodName = method.getName();
 
             if (isSimplePropertySettingMethod(method)) {
-                // nest or primitive property
-                properties.put(getSimpleFiledName(methodName), TypeDefinitionBuilder.build(method.getGenericParameterTypes()[0], method.getParameterTypes()[0], typeCache));
+                // property of custom type or primitive type
+                properties.put(generateSimpleFiledName(methodName), TypeDefinitionBuilder.build(method.getGenericParameterTypes()[0], method.getParameterTypes()[0], typeCache));
                 continue;
-            } else if (isMapPropertyMethod(method)) {
-                // map property
+            } else if (isMapPropertySettingMethod(method)) {
+                // property of map
                 Type type = method.getGenericParameterTypes()[0];
-                String fieldName = getMapFieldName(methodName);
-                if (validateMapType(type.toString())) {
-                    properties.put(fieldName, TypeDefinitionBuilder.build(type, method.getParameterTypes()[0], typeCache));
-                    continue;
-                } else {
-                    throw new IllegalArgumentException("Map protobuf property " + fieldName + "of Type " + type
-                            .toString() + " can't be parsed.Map with unString key or ByteString value is not supported.");
-                }
+                String fieldName = generateMapFieldName(methodName);
+                validateMapType(fieldName, type.toString());
+                properties.put(fieldName, TypeDefinitionBuilder.build(type, method.getParameterTypes()[0], typeCache));
+                continue;
             } else if (isListPropertySettingMethod(method)) {
-                // list property
+                // property of list
                 Type type = method.getGenericReturnType();
-                String fieldName = getListFieldName(methodName);
+                String fieldName = generateListFieldName(methodName);
+                validateListType(fieldName, type.toString());
                 TypeDefinition td;
-                if (validateListType(type.toString())) {
-                    if (ProtocolStringList.class.isAssignableFrom(method.getReturnType())) {
-                        // property defined as "repeated string" transform to ProtocolStringList,
-                        // should be build as List<String>.
-                        td = TypeDefinitionBuilder.build(STRING_LIST_TYPE, List.class, typeCache);
-                    } else {
-                        td = TypeDefinitionBuilder.build(type, method.getReturnType(), typeCache);
-                    }
-                    properties.put(fieldName, td);
-                    continue;
+                if (ProtocolStringList.class.isAssignableFrom(method.getReturnType())) {
+                    // property defined as "repeated string" transform to ProtocolStringList,
+                    // should be build as List<String>.
+                    td = TypeDefinitionBuilder.build(STRING_LIST_TYPE, List.class, typeCache);
                 } else {
-                    throw new IllegalArgumentException("List protobuf property " + fieldName + "of Type " + type.toString
-                            () + " can't be parsed.List of ByteString is not supported");
+                    td = TypeDefinitionBuilder.build(type, method.getReturnType(), typeCache);
                 }
+                properties.put(fieldName, td);
+                continue;
             }
         }
         typeDefinition.setProperties(properties);
@@ -144,16 +134,21 @@ public class ProtobufTypeBuilder implements TypeBuilder {
      * 1. Unsupported List with value type is Bytes <br/>
      * Bytes is a primitive type in Proto, transform to ByteString.class in java<br/>
      *
+     * @param fieldName
      * @param typeName
      * @return
      */
-    private boolean validateListType(String typeName) {
+    private void validateListType(String fieldName, String typeName) {
         Matcher matcher = LIST_PATTERN.matcher(typeName);
         if (!matcher.matches()) {
-            return false;
+            throw new IllegalArgumentException("List protobuf property " + fieldName + "of Type " +
+                    typeName + " can't be parsed.The type name should mathch[" + LIST_PATTERN.toString() + "].");
         }
 
-        return !ByteString.class.getName().equals(matcher.group(1));
+        if (ByteString.class.getName().equals(matcher.group(1))) {
+            throw new IllegalArgumentException("List protobuf property " + fieldName + "of Type " +
+                    typeName + " can't be parsed.List of ByteString is not supported.");
+        }
     }
 
     /**
@@ -161,16 +156,21 @@ public class ProtobufTypeBuilder implements TypeBuilder {
      * 2. Unsupported Map with key type is not String <br/>
      * Bytes is a primitive type in Proto, transform to ByteString.class in java<br/>
      *
+     * @param fieldName
      * @param typeName
      * @return
      */
-    private boolean validateMapType(String typeName) {
+    private void validateMapType(String fieldName, String typeName) {
         Matcher matcher = MAP_PATTERN.matcher(typeName);
         if (!matcher.matches()) {
-            return false;
+            throw new IllegalArgumentException("Map protobuf property " + fieldName + "of Type " +
+                    typeName + " can't be parsed.The type name should mathch[" + MAP_PATTERN.toString() + "].");
         }
 
-        return String.class.getName().equals(matcher.group(1)) && !ByteString.class.getName().equals(matcher.group(2));
+        if (!String.class.getName().equals(matcher.group(1)) || ByteString.class.getName().equals(matcher.group(2))) {
+            throw new IllegalArgumentException("Map protobuf property " + fieldName + "of Type " +
+                    typeName + " can't be parsed.Map with unString key or ByteString value is not supported.");
+        }
     }
 
     /**
@@ -180,7 +180,7 @@ public class ProtobufTypeBuilder implements TypeBuilder {
      * @param methodName
      * @return
      */
-    private String getSimpleFiledName(String methodName) {
+    private String generateSimpleFiledName(String methodName) {
         return toCamelCase(methodName.substring(3));
     }
 
@@ -191,7 +191,7 @@ public class ProtobufTypeBuilder implements TypeBuilder {
      * @param methodName
      * @return
      */
-    private String getMapFieldName(String methodName) {
+    private String generateMapFieldName(String methodName) {
         return toCamelCase(methodName.substring(6));
     }
 
@@ -202,7 +202,7 @@ public class ProtobufTypeBuilder implements TypeBuilder {
      * @param methodName
      * @return
      */
-    private String getListFieldName(String methodName) {
+    private String generateListFieldName(String methodName) {
         return toCamelCase(methodName.substring(3, methodName.length() - 4));
     }
 
@@ -214,7 +214,7 @@ public class ProtobufTypeBuilder implements TypeBuilder {
     }
 
     /**
-     * judge nest or primitive property<br/>
+     * judge custom type or primitive type property<br/>
      * 1. proto3 grammar ex: string name = 1 <br/>
      * 2. proto3 grammar ex: optional string name =1 <br/>
      * generated setting method setNameValue(String name);
@@ -234,15 +234,9 @@ public class ProtobufTypeBuilder implements TypeBuilder {
         // 1. - setUnknownFields( com.google.protobuf.UnknownFieldSet unknownFields)
         // 2. - setField(com.google.protobuf.Descriptors.FieldDescriptor field,java.lang.Object value)
         // 3. - setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,int index,java.lang.Object value）
-        if (methodName.equals("setField") && types[0].equals(Descriptors.FieldDescriptor.class)) {
-            return false;
-        }
-
-        if (methodName.equals("setUnknownFields") && types[0].equals(UnknownFieldSet.class)) {
-            return false;
-        }
-
-        if (methodName.equals("setRepeatedField") && types[0].equals(Descriptors.FieldDescriptor.class)) {
+        if (methodName.equals("setField") && types[0].equals(Descriptors.FieldDescriptor.class)
+                || methodName.equals("setUnknownFields") && types[0].equals(UnknownFieldSet.class)
+                || methodName.equals("setRepeatedField") && types[0].equals(Descriptors.FieldDescriptor.class)) {
             return false;
         }
 
@@ -303,13 +297,13 @@ public class ProtobufTypeBuilder implements TypeBuilder {
 
     /**
      * judge map property</br>
-     * proto3 grammar : map<string,string> strName = 1; </br>
+     * proto3 grammar : map<string,string> card = 1; </br>
      * generated setting method: putAllCards(java.util.Map<String, string> values) </br>
      *
      * @param methodTemp
      * @return
      */
-    private boolean isMapPropertyMethod(Method methodTemp) {
+    private boolean isMapPropertySettingMethod(Method methodTemp) {
         String methodName = methodTemp.getName();
         Class[] parameters = methodTemp.getParameterTypes();
         if (methodName.startsWith("putAll") && parameters.length == 1 && Map.class.isAssignableFrom(parameters[0])) {
