@@ -21,7 +21,6 @@ import org.apache.dubbo.metadata.definition.builder.DefaultTypeBuilder;
 import org.apache.dubbo.metadata.definition.builder.TypeBuilder;
 import org.apache.dubbo.metadata.definition.model.TypeDefinition;
 
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;

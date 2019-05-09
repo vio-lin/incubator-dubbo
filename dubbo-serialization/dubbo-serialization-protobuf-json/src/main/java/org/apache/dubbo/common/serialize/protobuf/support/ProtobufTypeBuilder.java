@@ -14,7 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.dubbo.metadata.definition.builder;
+package org.apache.dubbo.common.serialize.protobuf.support;
+
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
+import org.apache.dubbo.metadata.definition.TypeDefinitionBuilder;
+import org.apache.dubbo.metadata.definition.builder.TypeBuilder;
+import org.apache.dubbo.metadata.definition.model.TypeDefinition;
+
+import com.google.protobuf.ByteString;
+import com.google.protobuf.Descriptors;
+import com.google.protobuf.GeneratedMessageV3;
+import com.google.protobuf.ProtocolStringList;
+import com.google.protobuf.UnknownFieldSet;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -24,36 +36,32 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.dubbo.metadata.definition.TypeDefinitionBuilder;
-import org.apache.dubbo.metadata.definition.model.TypeDefinition;
-
-import com.google.protobuf.ByteString;
-import com.google.protobuf.Descriptors;
-import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ProtocolStringList;
-import com.google.protobuf.UnknownFieldSet;
-
 public class ProtobufTypeBuilder implements TypeBuilder {
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
     private static final Pattern MAP_PATTERN = Pattern.compile("^java[.]util[.]Map<(\\w+[[.$]\\w*]+), (\\w+[[.$]\\w*]+)>$");
     private static final Pattern LIST_PATTERN = Pattern.compile("^java[.]util[.]List<(\\w+([.$]\\w*)+)>$");
     private static final List<String> list = null;
-    //TODO 这里需要获取一个 GenericParameterType用户替换TypeString. 只发现可以从定义field中拿到
+    /**
+     * provider a List<String> type for TypeDefinitionBuilder.build(type,class,cache)
+     * "repeated string" transform to ProtocolStringList, should be build as List<String> type.
+     */
     private Type STRING_LIST_TYPE;
 
     public ProtobufTypeBuilder() {
         try {
             STRING_LIST_TYPE = ProtobufTypeBuilder.class.getDeclaredField("list").getGenericType();
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            // do nothing
         }
     }
+
     @Override
     public boolean accept(Type type, Class<?> clazz) {
         if (clazz == null) {
             return false;
         }
 
-        if(GeneratedMessageV3.class.isAssignableFrom(clazz)) {
+        if (GeneratedMessageV3.class.isAssignableFrom(clazz)) {
             return true;
         }
 
@@ -62,13 +70,12 @@ public class ProtobufTypeBuilder implements TypeBuilder {
 
     @Override
     public TypeDefinition build(Type type, Class<?> clazz, Map<Class<?>, TypeDefinition> typeCache) {
-     TypeDefinition typeDefinition = null;
-        GeneratedMessageV3.Builder builder;
+        TypeDefinition typeDefinition = new TypeDefinition(clazz.getName());
         try {
-            builder = getMessageBuilder(clazz);
-            typeDefinition =  parseFieldProperties(clazz,builder,typeCache);
+            GeneratedMessageV3.Builder builder = getMessageBuilder(clazz);
+            typeDefinition = buildProtobufTypeDefinition(clazz, builder, typeCache);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("TypeDefinition build failed.", e);
         }
 
         return typeDefinition;
@@ -81,61 +88,68 @@ public class ProtobufTypeBuilder implements TypeBuilder {
         return builder;
     }
 
-    private TypeDefinition parseFieldProperties(Class<?> clazz, GeneratedMessageV3.Builder builder, Map<Class<?>, TypeDefinition> typeCache) {
+    private TypeDefinition buildProtobufTypeDefinition(Class<?> clazz, GeneratedMessageV3.Builder builder, Map<Class<?>, TypeDefinition> typeCache) {
+        TypeDefinition typeDefinition = new TypeDefinition(clazz.getName());
         if (builder == null) {
-            return null;
+            return typeDefinition;
         }
 
-        TypeDefinition typeDefinition = new TypeDefinition(clazz.getName());
-        Map<String,TypeDefinition> properties = new HashMap();
-        Method[] allMethods = builder.getClass().getDeclaredMethods();
+        Map<String, TypeDefinition> properties = new HashMap();
+        Method[] methods = builder.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            String methodName = method.getName();
 
-        for (Method methodTemp : allMethods) {
-            String methodName = methodTemp.getName();
-
-            if (isSimplePropertyMethod(methodTemp)) {
-                properties.put(getSimpleFiledName(methodTemp), TypeDefinitionBuilder.build(methodTemp.getGenericParameterTypes()[0], methodTemp.getParameterTypes()[0], typeCache));
-            } else if (isMapPropertyMethod(methodTemp)) {
-                Type type = methodTemp.getGenericParameterTypes()[0];
+            if (isSimplePropertySettingMethod(method)) {
+                // nest or primitive property
+                properties.put(getSimpleFiledName(methodName), TypeDefinitionBuilder.build(method.getGenericParameterTypes()[0], method.getParameterTypes()[0], typeCache));
+                continue;
+            } else if (isMapPropertyMethod(method)) {
+                // map property
+                Type type = method.getGenericParameterTypes()[0];
                 String fieldName = getMapFieldName(methodName);
                 if (validateMapType(type.toString())) {
-                    properties.put(fieldName, TypeDefinitionBuilder.build(type, methodTemp.getParameterTypes()[0], typeCache));
+                    properties.put(fieldName, TypeDefinitionBuilder.build(type, method.getParameterTypes()[0], typeCache));
+                    continue;
                 } else {
-                    //TODO add some solution
-                    throw new IllegalArgumentException("Map protobuf property " + fieldName + "of Type "+type.toString()+" can't be parsed");
+                    throw new IllegalArgumentException("Map protobuf property " + fieldName + "of Type " + type
+                            .toString() + " can't be parsed.Map with unString key or ByteString value is not supported.");
                 }
-            } else if (isRepeatedPropertyMethod(methodTemp)) {
-                Type type = methodTemp.getGenericReturnType();
+            } else if (isListPropertySettingMethod(method)) {
+                // list property
+                Type type = method.getGenericReturnType();
                 String fieldName = getListFieldName(methodName);
                 TypeDefinition td;
-                if(validateListType(type.toString())){
-                    if (ProtocolStringList.class.isAssignableFrom(methodTemp.getReturnType())) {
-                        // repeated string 的属性 会被转换成protocolString对象,ServiceDefinition需要被重新定义为List<String>
+                if (validateListType(type.toString())) {
+                    if (ProtocolStringList.class.isAssignableFrom(method.getReturnType())) {
+                        // property defined as "repeated string" transform to ProtocolStringList,
+                        // should be build as List<String>.
                         td = TypeDefinitionBuilder.build(STRING_LIST_TYPE, List.class, typeCache);
                     } else {
-                        td = TypeDefinitionBuilder.build(type, methodTemp.getReturnType(), typeCache);
+                        td = TypeDefinitionBuilder.build(type, method.getReturnType(), typeCache);
                     }
                     properties.put(fieldName, td);
-                }else{
-                    //TODO add some solution
-                    throw new IllegalArgumentException("Map protobuf property " + fieldName + "of Type "+type.toString()+" can't be parsed");
+                    continue;
+                } else {
+                    throw new IllegalArgumentException("List protobuf property " + fieldName + "of Type " + type.toString
+                            () + " can't be parsed.List of ByteString is not supported");
                 }
             }
         }
         typeDefinition.setProperties(properties);
-        typeCache.put(clazz,typeDefinition);
+        typeCache.put(clazz, typeDefinition);
         return typeDefinition;
     }
 
     /**
-     * 1. 不支持 List中Value为Bytes的list <br/>
+     * 1. Unsupported List with value type is Bytes <br/>
+     * Bytes is a primitive type in Proto, transform to ByteString.class in java<br/>
      *
      * @param typeName
      * @return
      */
     private boolean validateListType(String typeName) {
         Matcher matcher = LIST_PATTERN.matcher(typeName);
-        if(!matcher.matches()){
+        if (!matcher.matches()) {
             return false;
         }
 
@@ -143,8 +157,9 @@ public class ProtobufTypeBuilder implements TypeBuilder {
     }
 
     /**
-     * 1. 不支持 PB中Value 为Bytes的map <br/>
-     * 2. 不支持 Key为非 String类型的map<br/>
+     * 1. Unsupported Map with value type is Bytes <br/>
+     * 2. Unsupported Map with key type is not String <br/>
+     * Bytes is a primitive type in Proto, transform to ByteString.class in java<br/>
      *
      * @param typeName
      * @return
@@ -155,65 +170,67 @@ public class ProtobufTypeBuilder implements TypeBuilder {
             return false;
         }
 
-        return String.class.getName().equals(matcher.group(1))&&!ByteString.class.getName().equals(matcher.group(2));
+        return String.class.getName().equals(matcher.group(1)) && !ByteString.class.getName().equals(matcher.group(2));
     }
 
     /**
-     * 一般属性的set方法 ex:setXXX();<br/>
-     * 获取第三位之后的字符串
+     * get unCollection unMap property name from setting method.<br/>
+     * ex:setXXX();<br/>
      *
-     * @param method
+     * @param methodName
      * @return
      */
-    private String getSimpleFiledName(Method method) {
-        return changeFirstCharacterToLow(method.getName().substring(3));
+    private String getSimpleFiledName(String methodName) {
+        return toCamelCase(methodName.substring(3));
     }
 
     /**
-     * map属性的set方法 ex: putAllXXX();<br/>
+     * get map property name from setting method.<br/>
+     * ex: putAllXXX();<br/>
      *
      * @param methodName
      * @return
      */
     private String getMapFieldName(String methodName) {
-        return changeFirstCharacterToLow(methodName.substring(6));
+        return toCamelCase(methodName.substring(6));
     }
 
     /**
-     * list属性的set方法 ex： getXXXList()
+     * get list property name from setting method.<br/>
+     * ex： getXXXList()<br/>
      *
      * @param methodName
      * @return
      */
     private String getListFieldName(String methodName) {
-        return changeFirstCharacterToLow(methodName.substring(3, methodName.length() - 4));
+        return toCamelCase(methodName.substring(3, methodName.length() - 4));
     }
 
 
-    private String changeFirstCharacterToLow(String substring) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Character.toLowerCase(substring.charAt(0)));
-        sb.append(substring.substring(1));
-        return sb.toString();
+    private String toCamelCase(String nameString) {
+        char[] chars = nameString.toCharArray();
+        chars[0] = Character.toLowerCase(chars[0]);
+        return new String(chars);
     }
 
     /**
-     * 简单属性判断<br/>
-     * 1. 对应 proto3 的默认属性 ex: string name = 1 <br/>
-     * 2. 对应 proto2 的optional 和 required ex: optional string name =1 <br/>
-     * 生成java代码 setNameValue(String name);
+     * judge nest or primitive property<br/>
+     * 1. proto3 grammar ex: string name = 1 <br/>
+     * 2. proto3 grammar ex: optional string name =1 <br/>
+     * generated setting method setNameValue(String name);
      *
      * @param method
      * @return
      */
-    private boolean isSimplePropertyMethod(Method method) {
+    private boolean isSimplePropertySettingMethod(Method method) {
         String methodName = method.getName();
         Class<?>[] types = method.getParameterTypes();
+
         if (!methodName.startsWith("set") || types.length != 1) {
             return false;
         }
 
-        // 过滤自动生成的几个的方法
+        // filter general setting method
         // 1. - setUnknownFields( com.google.protobuf.UnknownFieldSet unknownFields)
         // 2. - setField(com.google.protobuf.Descriptors.FieldDescriptor field,java.lang.Object value)
         // 3. - setRepeatedField(com.google.protobuf.Descriptors.FieldDescriptor field,int index,java.lang.Object value）
@@ -229,17 +246,23 @@ public class ProtobufTypeBuilder implements TypeBuilder {
             return false;
         }
 
-        //字符串变量存在 setXXXBytes(com.google.protobuf.ByteString value)的方法，解析传入String的方法
+        // String property has two setting method.
+        // skip setXXXBytes(com.google.protobuf.ByteString value)
+        // parse setXXX(String string)
         if (methodName.endsWith("Bytes") && types[0].equals(ByteString.class)) {
             return false;
         }
 
-        // PB Pojo的set方法可以传入Pojo对象或者Builder,解析Message
+        // Protobuf property has two setting method.
+        // skip setXXX(com.google.protobuf.Builder value)
+        // parse setXXX(com.google.protobuf.Message value)
         if (GeneratedMessageV3.Builder.class.isAssignableFrom(types[0])) {
             return false;
         }
 
-        // 当property类型为enum的时候，会多生成一个setXXXValue(int value)的方法
+        // Enum property has two setting method.
+        // skip setXXX(int value)
+        // parse setXXX(SomeEnum value)
         if (methodName.endsWith("Value") && types[0] == int.class) {
             return false;
         }
@@ -249,38 +272,39 @@ public class ProtobufTypeBuilder implements TypeBuilder {
 
 
     /**
-     * List属性解析</br>
-     * proto文件中属性标志为 repeated. ex: repeated string names;
-     * 生成java代码：List<String> getNamesList()
+     * judge List property</br>
+     * proto3 grammar ex: repeated string names; </br>
+     * generated setting method：List<String> getNamesList()
      *
      * @param method
      * @return
      */
-    boolean isRepeatedPropertyMethod(Method method) {
+    boolean isListPropertySettingMethod(Method method) {
         String methodName = method.getName();
         Class<?> type = method.getReturnType();
 
-        // 非List方法的逻辑
+
         if (!methodName.startsWith("get") || !methodName.endsWith("List")) {
             return false;
         }
 
-        // getCardsOrBuilderList() 该方法返回Builder的对象
+        // skip the setting method with Pb entity builder as parameter
         if (methodName.endsWith("BuilderList")) {
             return false;
         }
 
-        // 防止名字中存在List结尾的一般属性
-        if (List.class.isAssignableFrom(type)) {
-            return true;
+        // if field name end with List, should skip
+        if (!List.class.isAssignableFrom(type)) {
+            return false;
         }
-        return false;
+
+        return true;
     }
 
     /**
-     * Map属性方法解析</br>
-     * 对应proto3 语法: map<string,string> strName = 1;
-     * 生成java方法: putAllCards(java.util.Map<String, string> values)
+     * judge map property</br>
+     * proto3 grammar : map<string,string> strName = 1; </br>
+     * generated setting method: putAllCards(java.util.Map<String, string> values) </br>
      *
      * @param methodTemp
      * @return
