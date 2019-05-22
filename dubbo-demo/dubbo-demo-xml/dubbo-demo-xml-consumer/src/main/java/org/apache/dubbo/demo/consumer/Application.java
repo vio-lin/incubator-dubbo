@@ -28,8 +28,16 @@ public class Application {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-consumer.xml");
         context.start();
-        DemoService demoService = context.getBean("demoService", DemoService.class);
-        String hello = demoService.sayHello("world");
-        System.out.println("result: " + hello);
+        for (int i = 0; i < 20; i++) {
+            try{
+                DemoService demoService = context.getBean("demoService", DemoService.class);
+                DemoService demoService2 = context.getBean("demoService2", DemoService.class);
+                String hello = demoService.sayHello("world");
+                System.out.println("result: " + hello);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
     }
 }
