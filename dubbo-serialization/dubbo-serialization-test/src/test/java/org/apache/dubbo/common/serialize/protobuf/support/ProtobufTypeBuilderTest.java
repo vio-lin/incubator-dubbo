@@ -65,5 +65,11 @@ public class ProtobufTypeBuilderTest {
         assertThat(propertiesMap.get("phone").getType(), equalTo("java.util.List<org.apache.dubbo.common.serialize.protobuf.support.model.GooglePB$PhoneNumber>"));
         assertThat(propertiesMap.containsKey("doubleMap"), is(true));
         assertThat(propertiesMap.get("doubleMap").getType(), equalTo("java.util.Map<java.lang.String, org.apache.dubbo.common.serialize.protobuf.support.model.GooglePB$PhoneNumber>"));
+
+        TypeDefinition nestPbType = serviceDefinition.getTypes().stream().filter(a->a.getType().equals("org.apache.dubbo" +
+                ".common.serialize.protobuf.support.model.GooglePB$PhoneNumber")).findAny().get();
+        assertThat(nestPbType.getProperties().size(),equalTo(2));
+        assertThat(nestPbType.getProperties().get("number").getType(),equalTo("java.lang.String"));
+        assertThat(nestPbType.getProperties().get("type").getType(),equalTo("org.apache.dubbo.common.serialize.protobuf.support.model.GooglePB.PhoneType"));
     }
 }
