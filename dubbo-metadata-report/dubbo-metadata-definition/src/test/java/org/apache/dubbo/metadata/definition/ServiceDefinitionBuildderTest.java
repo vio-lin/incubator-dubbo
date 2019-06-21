@@ -37,6 +37,26 @@ public class ServiceDefinitionBuildderTest {
     public void testBuilderComplextObject() {
         FullServiceDefinition fullServiceDefinition = ServiceDefinitionBuilder.buildFullDefinition(DemoService.class);
         checkComplextObjectAsParam(fullServiceDefinition);
+        checkMethodParameterTypeDefinition(fullServiceDefinition);
+    }
+
+    private void checkMethodParameterTypeDefinition(FullServiceDefinition fullServiceDefinition) {
+        List<MethodDefinition> methodDefinitions = fullServiceDefinition.getMethods();
+        MethodDefinition complexComputeMethod = methodDefinitions.stream().filter(
+                a-> a.getName().equals("complexCompute")).findFirst().get();
+        Assertions.assertEquals(2, complexComputeMethod.getParameters().size());
+        Assertions.assertEquals(String.class.getName(), complexComputeMethod.getParameters().get(0).getType());
+        Assertions.assertEquals(ComplexObject.class.getName(), complexComputeMethod.getParameters().get(1).getType());
+
+        MethodDefinition findComplexObjectMethodDefintion = methodDefinitions.stream().filter(
+                a-> a.getName().equals("findComplexObject")).findFirst().get();
+        Assertions.assertEquals(6, findComplexObjectMethodDefintion.getParameters().size());
+        Assertions.assertEquals(String.class.getName(), findComplexObjectMethodDefintion.getParameters().get(0).getType());
+        Assertions.assertEquals("int", findComplexObjectMethodDefintion.getParameters().get(1).getType());
+        Assertions.assertEquals("long", findComplexObjectMethodDefintion.getParameters().get(2).getType());
+        Assertions.assertEquals("java.lang.String[]", findComplexObjectMethodDefintion.getParameters().get(3).getType());
+        Assertions.assertEquals("java.util.List<java.lang.Integer>", findComplexObjectMethodDefintion.getParameters().get(4).getType());
+        Assertions.assertEquals("org.apache.dubbo.metadata.definition.service.ComplexObject.TestEnum", findComplexObjectMethodDefintion.getParameters().get(5).getType());
     }
 
 

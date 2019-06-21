@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,11 +74,14 @@ public final class ServiceDefinitionBuilder {
             Type[] genericParamTypes = method.getGenericParameterTypes();
 
             String[] parameterTypes = new String[paramTypes.length];
+            List<TypeDefinition> parameters = new ArrayList<>();
             for (int i = 0; i < paramTypes.length; i++) {
                 TypeDefinition td = builder.build(genericParamTypes[i], paramTypes[i]);
                 parameterTypes[i] = td.getType();
+                parameters.add(td);
             }
             md.setParameterTypes(parameterTypes);
+            md.setParameters(parameters);
 
             // Process return type.
             TypeDefinition td = builder.build(method.getGenericReturnType(), method.getReturnType());
