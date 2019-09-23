@@ -33,6 +33,8 @@ import org.apache.dubbo.config.context.ConfigConfigurationAdapter;
 import org.apache.dubbo.config.support.Parameter;
 import org.apache.dubbo.rpc.model.ConsumerMethodModel;
 
+import org.springframework.beans.factory.BeanNameAware;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -51,7 +53,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.REMOVE_VALUE_PRE
  *
  * @export
  */
-public abstract class AbstractConfig implements Serializable {
+public abstract class AbstractConfig implements Serializable,BeanNameAware {
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractConfig.class);
     private static final long serialVersionUID = 4267533505537413570L;
@@ -656,4 +658,6 @@ public abstract class AbstractConfig implements Serializable {
         }
         return true;
     }
+
+
 }
