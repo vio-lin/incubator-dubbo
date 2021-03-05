@@ -59,13 +59,7 @@ public class MapTypeBuilder implements TypeBuilder {
                             + Arrays.toString(actualTypeArgs), type, actualTypeArgs));
         }
 
-        // Change since 2.7.6
-        /**
-         * Replacing <code>", "</code> to <code>","</code> will not change the semantic of
-         * {@link ParameterizedType#toString()}
-         * @see sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl
-         */
-        String mapType = replace(type.toString(), ", ", ",");
+        String mapType = type.toString();
 
         TypeDefinition typeDefinition = new TypeDefinition(mapType);
 
