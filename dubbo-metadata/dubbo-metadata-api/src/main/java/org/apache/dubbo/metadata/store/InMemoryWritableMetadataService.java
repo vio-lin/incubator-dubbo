@@ -133,7 +133,7 @@ public class InMemoryWritableMetadataService implements WritableMetadataService 
     @Override
     public void publishServiceDefinition(URL providerUrl) {
         try {
-            if(!ProtocolUtils.isGeneric(providerUrl.getParameter(GENERIC_KEY))){
+            if (!ProtocolUtils.isGeneric(providerUrl.getParameter(GENERIC_KEY))) {
                 String interfaceName = providerUrl.getParameter(INTERFACE_KEY);
                 if (StringUtils.isNotEmpty(interfaceName)) {
                     Class interfaceClass = Class.forName(interfaceName);
