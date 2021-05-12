@@ -125,10 +125,12 @@ public class ContextFilter implements Filter, Filter.Listener {
         }
 
         try {
-            context.clearAfterEachInvoke(false);
+            // 不设置 clearAfterEachInvoke = false,用于解决 Dubbo 服务实现类内多个异步的调用时，
+            // 客户端将复用服务端 RpcContext 导致每次调用的客户端上下文不会被清理
+            // context.clearAfterEachInvoke(false);
             return invoker.invoke(invocation);
         } finally {
-            context.clearAfterEachInvoke(true);
+            //context.clearAfterEachInvoke(true);
             // IMPORTANT! For async scenario, we must remove context from current thread, so we always create a new RpcContext for the next invoke for the same thread.
             RpcContext.removeContext(true);
             RpcContext.removeServerContext();
