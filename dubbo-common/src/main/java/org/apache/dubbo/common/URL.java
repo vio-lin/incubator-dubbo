@@ -109,6 +109,8 @@ class URL implements Serializable {
 
     private final Map<String, String> parameters;
 
+    private final Map<String, String> defaultParameters;
+
     private final Map<String, Map<String, String>> methodParameters;
 
     // ==== cache ====
@@ -141,8 +143,9 @@ class URL implements Serializable {
         this.port = 0;
         this.address = null;
         this.path = null;
-        this.parameters = null;
-        this.methodParameters = null;
+        this.parameters = Collections.emptyMap();
+        this.defaultParameters = Collections.emptyMap();
+        this.methodParameters = Collections.emptyMap();
     }
 
     public URL(String protocol, String host, int port) {
@@ -217,6 +220,7 @@ class URL implements Serializable {
             parameters = new HashMap<>(parameters);
         }
         this.parameters = Collections.unmodifiableMap(parameters);
+        this.defaultParameters = Collections.unmodifiableMap(toDefaultParameters(parameters));
         this.methodParameters = Collections.unmodifiableMap(methodParameters);
     }
 
@@ -256,10 +260,6 @@ class URL implements Serializable {
                         String key = part.substring(0, j);
                         String value = part.substring(j + 1);
                         parameters.put(key, value);
-                        // compatible with lower versions registering "default." keys
-                        if (key.startsWith(DEFAULT_KEY_PREFIX)) {
-                            parameters.putIfAbsent(key.substring(DEFAULT_KEY_PREFIX.length()), value);
-                        }
                     } else {
                         parameters.put(part, part);
                     }
@@ -318,6 +318,21 @@ class URL implements Serializable {
         }
 
         return new URL(protocol, username, password, host, port, path, parameters);
+    }
+
+    public static Map<String, String> toDefaultParameters(Map<String, String> parameters) {
+        Map<String, String> defaultParameters = new HashMap<>();
+        if (parameters == null) {
+            return defaultParameters;
+        }
+
+        for (String key : parameters.keySet()) {
+            String value = parameters.get(key);
+            if (key.startsWith(DEFAULT_KEY_PREFIX)) {
+                defaultParameters.put(key.substring(DEFAULT_KEY_PREFIX.length()), value);
+            }
+        }
+        return defaultParameters;
     }
 
     public static Map<String, Map<String, String>> toMethodParameters(Map<String, String> parameters) {
@@ -579,7 +594,11 @@ class URL implements Serializable {
     }
 
     public String getParameter(String key) {
-        return parameters.get(key);
+        String value = parameters.get(key);
+        if (StringUtils.isEmpty(value)) {
+            return defaultParameters.get(key);
+        }
+        return value;
     }
 
     public String getParameter(String key, String defaultValue) {

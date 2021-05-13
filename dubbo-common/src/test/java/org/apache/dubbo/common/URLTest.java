@@ -38,6 +38,86 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class URLTest {
 
     @Test
+    public void testUrlSubClassGetParameterNotNPE() {
+        TestUrl testUrl = new TestUrl();
+        testUrl.getParameter("someKey'");
+        testUrl.getMethodParameter("someMethod", "someKey");
+    }
+
+    @Test
+    public void test_get_parameter_with_parameter_and_default_parameter() {
+        String timeout = "5";
+        String defaultTimeout = "10";
+        String urlStr = "/context/path?version=1.0.0&application=morgan&timeout=" + timeout + "&default.timeout=" + defaultTimeout;
+        URL url = URL.valueOf(urlStr);
+        String timeoutActual = url.getParameter("timeout");
+        assertEquals(timeout, timeoutActual);
+    }
+
+    @Test
+    public void test_get_parameter_with_only_default_parameter() {
+        String defaultTimeout = "10";
+        String urlStr = "/context/path?version=1.0.0&application=morgan&default.timeout=" + defaultTimeout;
+        URL url = URL.valueOf(urlStr);
+        String timeoutActual = url.getParameter("timeout");
+        assertEquals(defaultTimeout, timeoutActual);
+    }
+
+    @Test
+    public void test_get_parameter_with_add_new_default_parameter_by_add_parameters_method() {
+        String defaultTimeout = "10";
+        String newDefaultTimeout = "200";
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("default.timeout", newDefaultTimeout);
+
+        String urlStr = "/context/path?version=1.0.0&application=morgan&default.timeout=" + defaultTimeout;
+        URL url = URL.valueOf(urlStr);
+        url = url.addParameters(parameters);
+        String timeoutActual = url.getParameter("timeout");
+        assertEquals(newDefaultTimeout, timeoutActual);
+    }
+
+    @Test
+    public void test_get_parameter_with_add_existed_default_parameter_by_add_parameter_method() {
+        String defaultTimeout = "10";
+        String newDefaultTimeout = "200";
+
+        String urlStr = "/context/path?version=1.0.0&application=morgan&default.timeout=" + defaultTimeout;
+        URL url = URL.valueOf(urlStr);
+        url = url.addParameter("default.timeout", newDefaultTimeout);
+        String timeoutActual = url.getParameter("timeout");
+        assertEquals(newDefaultTimeout, timeoutActual);
+    }
+
+    @Test
+    public void test_get_parameter_with_add_new_default_parameter_with_parameter_existed_by_add_parameters_method() {
+        String timeout = "10";
+        String newDefaultTimeout = "200";
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("default.timeout", newDefaultTimeout);
+
+        String urlStr = "/context/path?version=1.0.0&application=morgan&timeout=" + timeout;
+        URL url = URL.valueOf(urlStr);
+        url = url.addParameters(parameters);
+        String timeoutActual = url.getParameter("timeout");
+        assertEquals(timeout, timeoutActual);
+    }
+
+    @Test
+    public void test_get_parameter_with_add_new_parameter_with_parameter_existed_by_add_parameters_method() {
+        String timeout = "10";
+        String newTimeout = "200";
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("timeout", newTimeout);
+
+        String urlStr = "/context/path?version=1.0.0&application=morgan&timeout=" + timeout;
+        URL url = URL.valueOf(urlStr);
+        url = url.addParameters(parameters);
+        String timeoutActual = url.getParameter("timeout");
+        assertEquals(newTimeout, timeoutActual);
+    }
+
+    @Test
     public void test_valueOf_noProtocolAndHost() throws Exception {
         URL url = URL.valueOf("/context/path?version=1.0.0&application=morgan");
         assertURLStrDecoder(url);
@@ -873,5 +953,9 @@ public class URLTest {
 
         url = URL.valueOf("dubbo://10.20.130.230:20880/path");
         assertURLStrDecoder(url);
+    }
+
+    private static class TestUrl extends URL{
+
     }
 }
