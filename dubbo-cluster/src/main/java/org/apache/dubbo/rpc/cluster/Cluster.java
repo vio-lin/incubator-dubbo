@@ -17,7 +17,9 @@
 package org.apache.dubbo.rpc.cluster;
 
 import org.apache.dubbo.common.extension.Adaptive;
+import org.apache.dubbo.common.extension.ExtensionLoader;
 import org.apache.dubbo.common.extension.SPI;
+import org.apache.dubbo.common.utils.StringUtils;
 import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.RpcException;
 import org.apache.dubbo.rpc.cluster.support.FailoverCluster;
@@ -43,4 +45,10 @@ public interface Cluster {
     @Adaptive
     <T> Invoker<T> join(Directory<T> directory) throws RpcException;
 
+    static Cluster getCluster(String name) {
+        if (StringUtils.isEmpty(name)) {
+            name = FailoverCluster.NAME;
+        }
+        return ExtensionLoader.getExtensionLoader(Cluster.class).getExtension(name);
+    }
 }
