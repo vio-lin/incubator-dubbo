@@ -93,6 +93,10 @@ public abstract class AbstractDirectory<T> implements Directory<T> {
         routerChain.addRouters(routers);
     }
 
+    public URL getSubscribeConsumerUrl(){
+        return this.consumerUrl;
+    }
+
     public URL getConsumerUrl() {
         return consumerUrl;
     }
