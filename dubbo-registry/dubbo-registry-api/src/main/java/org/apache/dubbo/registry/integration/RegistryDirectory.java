@@ -209,8 +209,8 @@ public class RegistryDirectory<T> extends AbstractDirectory<T> implements Notify
         }
         // unsubscribe.
         try {
-            if (getConsumerUrl() != null && registry != null && registry.isAvailable()) {
-                registry.unsubscribe(getConsumerUrl(), this);
+            if (getSubscribeConsumerUrl() != null && registry != null && registry.isAvailable()) {
+                registry.unsubscribe(getSubscribeConsumerUrl(), this);
             }
             ExtensionLoader.getExtensionLoader(GovernanceRuleRepository.class).getDefaultExtension()
                     .removeListener(ApplicationModel.getApplication(), CONSUMER_CONFIGURATION_LISTENER);
