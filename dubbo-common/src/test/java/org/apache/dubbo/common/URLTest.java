@@ -149,10 +149,10 @@ public class URLTest {
 
     private void assertURLStrDecoder(URL url) {
         String fullURLStr = url.toFullString();
-        URL newUrl =  URLStrParser.parseEncodedStr(URL.encode(fullURLStr));
+        URL newUrl = URLStrParser.parseEncodedStr(URL.encode(fullURLStr));
         assertEquals(URL.valueOf(fullURLStr), newUrl);
 
-        URL newUrl2 =  URLStrParser.parseDecodedStr(fullURLStr);
+        URL newUrl2 = URLStrParser.parseDecodedStr(fullURLStr);
         assertEquals(URL.valueOf(fullURLStr), newUrl2);
     }
 
@@ -984,6 +984,37 @@ public class URLTest {
     }
 
     @Test
+    public void testGetMethodParameterDirect() {
+        String methodName = "method1";
+        String parameterKey = "someKey";
+        String parameterValue = "someValue";
+        URL url1 = URL.valueOf("10.20.130.230:20880/context/path?interface=org.apache.dubbo.test" +
+                ".interfaceName&group=group&version=1.0.0&methods=method1&method1" +
+                ".someKey=someValue&someKey=someValue1&default.someKey=someValue3");
+        assertEquals(parameterValue, url1.getMethodParameter(methodName, parameterKey));
+    }
+
+    @Test
+    public void testGetMethodParameterFallbackToUrlParameter() {
+        String methodName = "method1";
+        String parameterKey = "someKey";
+        String parameterValue = "someValue1";
+        URL url1 = URL.valueOf("10.20.130.230:20880/context/path?interface=org.apache.dubbo.test" +
+                ".interfaceName&group=group&version=1.0.0&methods=method1&someKey=someValue1&default.someKey=someValue3");
+        assertEquals(parameterValue, url1.getMethodParameter(methodName, parameterKey));
+    }
+
+    @Test
+    public void testGetMethodParameterFallbackToUrlDefaultParameter() {
+        String methodName = "method1";
+        String parameterKey = "someKey";
+        String parameterValue = "someValue3";
+        URL url1 = URL.valueOf("10.20.130.230:20880/context/path?interface=org.apache.dubbo.test" +
+                ".interfaceName&group=group&version=1.0.0&methods=method1&default.someKey=someValue3");
+        assertEquals(parameterValue, url1.getMethodParameter(methodName, parameterKey));
+    }
+
+    @Test
     public void testValueOf() {
         URL url = URL.valueOf("10.20.130.230");
         assertURLStrDecoder(url);
@@ -998,7 +1029,7 @@ public class URLTest {
         assertURLStrDecoder(url);
     }
 
-    private static class TestUrl extends URL{
+    private static class TestUrl extends URL {
 
     }
 }
