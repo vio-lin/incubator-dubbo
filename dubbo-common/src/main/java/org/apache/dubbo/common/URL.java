@@ -820,7 +820,7 @@ class URL implements Serializable {
             value = keyMap.get(key);
         }
         if (StringUtils.isEmpty(value)) {
-            value = parameters.get(key);
+            value = getParameter(key);
         }
         return value;
     }
