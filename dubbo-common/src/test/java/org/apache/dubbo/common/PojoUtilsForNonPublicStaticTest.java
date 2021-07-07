@@ -14,18 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.dubbo.common.serialize.hessian2;
+package org.apache.dubbo.common;
 
-import com.alibaba.com.caucho.hessian.io.SerializerFactory;
+import org.apache.dubbo.common.utils.PojoUtils;
+import org.junit.jupiter.api.Test;
 
-public class Hessian2SerializerFactory extends SerializerFactory {
+public class PojoUtilsForNonPublicStaticTest {
 
-    public Hessian2SerializerFactory() {
+    @Test
+    public void testNonPublicStaticClass() {
+        NonPublicStaticData nonPublicStaticData = new NonPublicStaticData("horizon");
+        PojoUtils.generalize(nonPublicStaticData);
     }
 
-    @Override
-    public ClassLoader getClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
-    }
+    /**
+     * the static class need is not same package with PojoUtils, so define it here.
+     */
+    static class NonPublicStaticData {
 
+        private String name;
+
+        public NonPublicStaticData(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
 }

@@ -17,6 +17,7 @@
 package org.apache.dubbo.common.serialize.hessian2;
 
 import org.apache.dubbo.common.serialize.ObjectOutput;
+import org.apache.dubbo.common.serialize.hessian2.dubbo.Hessian2FactoryInitializer;
 
 import com.alibaba.com.caucho.hessian.io.Hessian2Output;
 
@@ -27,11 +28,13 @@ import java.io.OutputStream;
  * Hessian2 object output implementation
  */
 public class Hessian2ObjectOutput implements ObjectOutput {
+
     private final Hessian2Output mH2o;
 
     public Hessian2ObjectOutput(OutputStream os) {
         mH2o = new Hessian2Output(os);
-        mH2o.setSerializerFactory(Hessian2SerializerFactory.SERIALIZER_FACTORY);
+        mH2o.setSerializerFactory(Hessian2FactoryInitializer.getInstance().getSerializerFactory());
+        mH2o.setCloseStreamOnClose(true);
     }
 
     @Override
