@@ -19,6 +19,7 @@ package org.apache.dubbo.common.extension;
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.context.Lifecycle;
 import org.apache.dubbo.common.extension.support.ActivateComparator;
+import org.apache.dubbo.common.extension.support.WrapperComparator;
 import org.apache.dubbo.common.lang.Prioritized;
 import org.apache.dubbo.common.logger.Logger;
 import org.apache.dubbo.common.logger.LoggerFactory;
@@ -412,21 +413,36 @@ public class ExtensionLoader<T> {
      * Find the extension with the given name. If the specified name is not found, then {@link IllegalStateException}
      * will be thrown.
      */
+
     @SuppressWarnings("unchecked")
     public T getExtension(String name) {
+        T extension = getExtension(name, true);
+        if (extension == null) {
+            throw new IllegalArgumentException("Not find extension: " + name);
+        }
+        return extension;
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public T getExtension(String name, boolean wrap) {
         if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException("Extension name == null");
         }
         if ("true".equals(name)) {
             return getDefaultExtension();
         }
-        final Holder<Object> holder = getOrCreateHolder(name);
+        String cacheKey = name;
+        if (!wrap) {
+            cacheKey += "_origin";
+        }
+        final Holder<Object> holder = getOrCreateHolder(cacheKey);
         Object instance = holder.get();
         if (instance == null) {
             synchronized (holder) {
                 instance = holder.get();
                 if (instance == null) {
-                    instance = createExtension(name);
+                    instance = createExtension(name, wrap);
                     holder.set(instance);
                 }
             }
@@ -624,7 +640,7 @@ public class ExtensionLoader<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private T createExtension(String name) {
+    private T createExtension(String name, boolean wrap) {
         Class<?> clazz = getExtensionClasses().get(name);
         if (clazz == null) {
             throw findException(name);
@@ -634,14 +650,23 @@ public class ExtensionLoader<T> {
             if (instance == null) {
                 EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.newInstance());
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
+                injectExtension(instance);
             }
-            injectExtension(instance);
-            Set<Class<?>> wrapperClasses = cachedWrapperClasses;
-            if (CollectionUtils.isNotEmpty(wrapperClasses)) {
-                for (Class<?> wrapperClass : wrapperClasses) {
-                    instance = injectExtension((T) wrapperClass.getConstructor(type).newInstance(instance));
+            if(wrap){
+                List<Class<?>> wrapperClassesList = new ArrayList<>();
+                if (cachedWrapperClasses != null) {
+                    wrapperClassesList.addAll(cachedWrapperClasses);
+                    wrapperClassesList.sort(WrapperComparator.COMPARATOR);
+                    Collections.reverse(wrapperClassesList);
+                }
+
+                if (CollectionUtils.isNotEmpty(wrapperClassesList)) {
+                    for (Class<?> wrapperClass : wrapperClassesList) {
+                        instance = injectExtension((T) wrapperClass.getConstructor(type).newInstance(instance));
+                    }
                 }
             }
+            // Warning: After an instance of Lifecycle is wrapped by cachedWrapperClasses, it may not still be Lifecycle instance, this application may not invoke the lifecycle.initialize hook.
             initExtension(instance);
             return instance;
         } catch (Throwable t) {
