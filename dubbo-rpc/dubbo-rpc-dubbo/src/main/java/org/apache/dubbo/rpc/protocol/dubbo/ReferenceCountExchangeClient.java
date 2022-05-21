@@ -38,7 +38,7 @@ import static org.apache.dubbo.rpc.protocol.dubbo.Constants.LAZY_CONNECT_INITIAL
  * dubbo protocol support class.
  */
 @SuppressWarnings("deprecation")
-final class ReferenceCountExchangeClient implements ExchangeClient {
+public final class ReferenceCountExchangeClient implements ExchangeClient {
 
     private final URL url;
     private final AtomicInteger referenceCount = new AtomicInteger(0);

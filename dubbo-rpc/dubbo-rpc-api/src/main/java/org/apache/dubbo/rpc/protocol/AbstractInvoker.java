@@ -26,9 +26,11 @@ import org.apache.dubbo.common.threadpool.manager.ExecutorRepository;
 import org.apache.dubbo.common.utils.ArrayUtils;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.NetUtils;
+import org.apache.dubbo.rpc.AdaptiveFutureFactory;
 import org.apache.dubbo.rpc.AsyncRpcResult;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.InvokeMode;
+import org.apache.dubbo.rpc.InvokeModeParser;
 import org.apache.dubbo.rpc.Invoker;
 import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcContext;
@@ -41,6 +43,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -51,6 +54,10 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    protected final InvokeModeParser invokeModeParser = ExtensionLoader.getExtensionLoader(InvokeModeParser.class).getDefaultExtension();
+
+    protected final AdaptiveFutureFactory adaptiveFutureFactory = ExtensionLoader.getExtensionLoader(AdaptiveFutureFactory.class).getDefaultExtension();
+
     private final Class<T> type;
 
     private final URL url;
@@ -59,7 +66,7 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
 
     private volatile boolean available = true;
 
-    private AtomicBoolean destroyed = new AtomicBoolean(false);
+    private final AtomicBoolean destroyed = new AtomicBoolean(false);
 
     public AbstractInvoker(Class<T> type, URL url) {
         this(type, url, (Map<String, Object>) null);
@@ -155,7 +162,7 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
             invocation.addObjectAttachments(contextAttachments);
         }
 
-        invocation.setInvokeMode(RpcUtils.getInvokeMode(url, invocation));
+        invocation.setInvokeMode(getInvokeMode(invocation));
         RpcUtils.attachInvocationIdIfAsync(getUrl(), invocation);
 
         AsyncRpcResult asyncResult;
@@ -180,13 +187,22 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
         } catch (Throwable e) {
             asyncResult = AsyncRpcResult.newDefaultAsyncResult(null, e, invocation);
         }
-        RpcContext.getContext().setFuture(new FutureAdapter(asyncResult.getResponseFuture()));
+
+        RpcContext.getContext().setFuture(getAdaptiveFuture(asyncResult));
         return asyncResult;
+    }
+
+    protected InvokeMode getInvokeMode(Invocation invocation) {
+        return invokeModeParser.parse(getUrl(), invocation);
+    }
+
+    protected CompletableFuture<?> getAdaptiveFuture(AsyncRpcResult asyncResult) {
+        return adaptiveFutureFactory.getAdaptiveFuture(asyncResult);
     }
 
     protected ExecutorService getCallbackExecutor(URL url, Invocation inv) {
         ExecutorService sharedExecutor = ExtensionLoader.getExtensionLoader(ExecutorRepository.class).getDefaultExtension().getExecutor(url);
-        if (InvokeMode.SYNC == RpcUtils.getInvokeMode(getUrl(), inv)) {
+        if (InvokeMode.SYNC == getInvokeMode(inv)) {
             return new ThreadlessExecutor(sharedExecutor);
         } else {
             return sharedExecutor;
@@ -195,4 +211,19 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
 
     protected abstract Result doInvoke(Invocation invocation) throws Throwable;
 
+    public static class DefaultInvokeModeParser implements InvokeModeParser {
+
+        @Override
+        public InvokeMode parse(URL url, Invocation invocation) {
+            return RpcUtils.getInvokeMode(url, invocation);
+        }
+    }
+
+    public static class DefaultAdaptiveFutureFactory implements AdaptiveFutureFactory {
+
+        @Override
+        public CompletableFuture<Object> getAdaptiveFuture(AsyncRpcResult asyncResult) {
+            return new FutureAdapter<>(asyncResult.getResponseFuture());
+        }
+    }
 }
