@@ -359,7 +359,7 @@ public class DubboProtocol extends AbstractProtocol {
         return new DubboProtocolServer(server);
     }
 
-    private void optimizeSerialization(URL url) throws RpcException {
+    protected void optimizeSerialization(URL url) throws RpcException {
         String className = url.getParameter(OPTIMIZER_KEY, "");
         if (StringUtils.isEmpty(className) || optimizers.contains(className)) {
             return;
@@ -407,7 +407,7 @@ public class DubboProtocol extends AbstractProtocol {
         return invoker;
     }
 
-    private ExchangeClient[] getClients(URL url) {
+    protected ExchangeClient[] getClients(URL url) {
         // whether to share connection
 
         boolean useShareConnect = false;
