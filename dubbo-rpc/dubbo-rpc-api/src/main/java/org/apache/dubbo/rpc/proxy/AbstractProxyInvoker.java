@@ -107,7 +107,7 @@ public abstract class AbstractProxyInvoker<T> implements Invoker<T> {
         }
     }
 
-    protected CompletableFuture<Object> wrapWithFuture(Object value) {
+	private CompletableFuture<Object> wrapWithFuture(Object value) {
         if (RpcContext.getContext().isAsyncStarted()) {
             return ((AsyncContextImpl)(RpcContext.getContext().getAsyncContext())).getInternalFuture();
         } else if (value instanceof CompletableFuture) {
