@@ -191,6 +191,12 @@
         <commons_compress_version>1.23.0</commons_compress_version>
         <revision>3.2.6</revision>
     </properties>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://maven.release.ctripcorp.com/nexus/content/repositories/mixsnapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
