@@ -52,6 +52,7 @@ import static org.apache.dubbo.remoting.Constants.DISPATCHER_KEY;
 import static org.apache.dubbo.rpc.Constants.EXECUTES_KEY;
 import static org.apache.dubbo.rpc.protocol.grpc.GrpcConstants.CLIENT_INTERCEPTORS;
 import static org.apache.dubbo.rpc.protocol.grpc.GrpcConstants.EXECUTOR;
+import static org.apache.dubbo.rpc.protocol.grpc.GrpcConstants.FLOWCONTROL_WINDOW;
 import static org.apache.dubbo.rpc.protocol.grpc.GrpcConstants.MAX_CONCURRENT_CALLS_PER_CONNECTION;
 import static org.apache.dubbo.rpc.protocol.grpc.GrpcConstants.MAX_INBOUND_MESSAGE_SIZE;
 import static org.apache.dubbo.rpc.protocol.grpc.GrpcConstants.MAX_INBOUND_METADATA_SIZE;
@@ -79,7 +80,7 @@ public class GrpcOptionsUtils {
             builder.sslContext(buildServerSslContext(url));
         }
 
-        int flowControlWindow = url.getParameter(MAX_INBOUND_MESSAGE_SIZE, 0);
+        int flowControlWindow = url.getParameter(FLOWCONTROL_WINDOW, 0);
         if (flowControlWindow > 0) {
             builder.flowControlWindow(flowControlWindow);
         }

@@ -22,7 +22,7 @@ public class GrpcConstants {
     public static final String DIERCTOR_KEY = "grpc.director";
     public static final String HANDSHAKE_TIMEOUT = "grpc.handshakeTimeout";
     public static final String MAX_INBOUND_MESSAGE_SIZE = "grpc.maxInboundMessageSize";
-    public static final String MAX_INBOUND_METADATA_SIZE = "grpc.maxOutboundMessageSize";
+    public static final String MAX_INBOUND_METADATA_SIZE = "grpc.maxInboundMetadataSize";
     public static final String FLOWCONTROL_WINDOW = "grpc.flowControlWindow";
     public static final String MAX_CONCURRENT_CALLS_PER_CONNECTION = "grpc.maxConcurrentCallsPerConnection";
 
