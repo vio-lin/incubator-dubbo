@@ -16,10 +16,6 @@
  */
 package org.apache.dubbo.common.utils;
 
-import org.apache.dubbo.common.constants.CommonConstants;
-import org.apache.dubbo.common.logger.Logger;
-import org.apache.dubbo.common.logger.LoggerFactory;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -53,6 +49,10 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import org.apache.dubbo.common.constants.CommonConstants;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 
 import static org.apache.dubbo.common.utils.ClassUtils.isAssignableFrom;
 
@@ -401,6 +401,7 @@ public class PojoUtils {
                 } catch (ClassNotFoundException e) {
                     // ignore
                 }
+                SerializeClassChecker.getInstance().validateClass(type);
             }
 
             // special logic for enum
@@ -603,6 +604,8 @@ public class PojoUtils {
                 throw new RuntimeException(e.getMessage(), e);
             } catch (InvocationTargetException e) {
                 throw new RuntimeException(e.getMessage(), e);
+            } catch (Throwable e){
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
     }
@@ -616,8 +619,14 @@ public class PojoUtils {
         if ("char".equals(parameterType.getName())) {
             return Character.MIN_VALUE;
         }
-        if ("bool".equals(parameterType.getName())) {
+        if ("boolean".equals(parameterType.getName())) {
             return false;
+        }
+        if ("byte".equals(parameterType.getName())) {
+            return (byte) 0;
+        }
+        if ("short".equals(parameterType.getName())) {
+            return (short) 0;
         }
         return parameterType.isPrimitive() ? 0 : null;
     }
