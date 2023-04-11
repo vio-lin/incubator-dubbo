@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.apache.dubbo.remoting.Constants.RECONNECT_KEY;
+import static org.apache.dubbo.common.constants.CommonConstants.DEFAULT_SERVER_SHUTDOWN_TIMEOUT;
 import static org.apache.dubbo.remoting.Constants.SEND_RECONNECT_KEY;
 import static org.apache.dubbo.rpc.protocol.dubbo.Constants.LAZY_CONNECT_INITIAL_STATE_KEY;
 
@@ -42,6 +42,7 @@ final class ReferenceCountExchangeClient implements ExchangeClient {
 
     private final URL url;
     private final AtomicInteger referenceCount = new AtomicInteger(0);
+    private int shutdownWaitTime = DEFAULT_SERVER_SHUTDOWN_TIMEOUT;
 
     private ExchangeClient client;
 
@@ -213,5 +214,12 @@ final class ReferenceCountExchangeClient implements ExchangeClient {
     public int getCount(){
         return referenceCount.get();
     }
-}
 
+    public int getShutdownWaitTime() {
+        return shutdownWaitTime;
+    }
+
+    public void setShutdownWaitTime(int shutdownWaitTime) {
+        this.shutdownWaitTime = shutdownWaitTime;
+    }
+}
