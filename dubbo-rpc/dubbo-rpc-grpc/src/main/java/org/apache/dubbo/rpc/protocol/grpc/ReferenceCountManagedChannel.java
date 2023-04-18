@@ -35,6 +35,7 @@ public class ReferenceCountManagedChannel extends ManagedChannel {
 
     public ReferenceCountManagedChannel(ManagedChannel delegated) {
         this.grpcChannel = delegated;
+        referenceCount.incrementAndGet();
     }
 
     /**
