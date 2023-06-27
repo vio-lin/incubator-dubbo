@@ -1079,7 +1079,7 @@ public class DubboBootstrap extends GenericEventListener {
                     destroyRegistries();
                     DubboShutdownHook.destroyProtocols();
                     destroyServiceDiscoveries();
-
+                    destroyExecutorRepository();
                     clear();
                     shutdown();
                     release();
@@ -1088,6 +1088,10 @@ public class DubboBootstrap extends GenericEventListener {
                 destroyLock.unlock();
             }
         }
+    }
+
+    private void destroyExecutorRepository() {
+        ExtensionLoader.getExtensionLoader(ExecutorRepository.class).getDefaultExtension().destroyAll();
     }
 
     private void destroyRegistries() {
