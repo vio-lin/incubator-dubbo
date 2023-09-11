@@ -558,7 +558,7 @@ public class URLParam {
                     newExtraParams = new HashMap<>(EXTRA_PARAMS);
                 }
                 newExtraParams.put(entry.getKey(), entry.getValue());
-                String[] methodSplit = entry.getKey().split("\\.");
+                String[] methodSplit = entry.getKey().split("\\.",2);
                 if (methodSplit.length == 2) {
                     if (newMethodParams == null) {
                         newMethodParams = new HashMap<>(METHOD_PARAMETERS);
@@ -688,7 +688,7 @@ public class URLParam {
                 }
                 newExtraParams.remove(key);
 
-                String[] methodSplit = key.split("\\.");
+                String[] methodSplit = key.split("\\.", 2);
                 if (methodSplit.length == 2) {
                     if (newMethodParams == null) {
                         newMethodParams = new HashMap<>(METHOD_PARAMETERS);
