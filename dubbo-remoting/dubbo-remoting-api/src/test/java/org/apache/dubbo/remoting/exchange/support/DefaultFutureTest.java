@@ -17,6 +17,9 @@
 
 package org.apache.dubbo.remoting.exchange.support;
 
+import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.extension.ExtensionLoader;
+import org.apache.dubbo.common.threadpool.manager.ExecutorRepository;
 import org.apache.dubbo.remoting.Channel;
 import org.apache.dubbo.remoting.TimeoutException;
 import org.apache.dubbo.remoting.exchange.Request;
@@ -28,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DefaultFutureTest {
@@ -114,6 +118,17 @@ public class DefaultFutureTest {
             Assertions.assertTrue(e.getCause() instanceof TimeoutException, "catch exception is not timeout exception!");
             System.out.println(e.getMessage());
         }
+    }
+
+    @Test
+    public void testClose() throws Exception {
+        Channel channel = new MockedChannel();
+        Request request = new Request(123);
+        ExecutorService executor = ExtensionLoader.getExtensionLoader(ExecutorRepository.class)
+            .getDefaultExtension().createExecutorIfAbsent(URL.valueOf("dubbo://127.0.0.1:23456"));
+        DefaultFuture.newFuture(channel, request, 1000, executor);
+        DefaultFuture.closeChannel(channel);
+        Assertions.assertFalse(executor.isTerminated());
     }
 
     /**
