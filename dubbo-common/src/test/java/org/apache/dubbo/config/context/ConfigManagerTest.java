@@ -16,6 +16,7 @@
  */
 package org.apache.dubbo.config.context;
 
+import org.apache.dubbo.common.serialization.PreferSerializationProvider;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ConfigCenterConfig;
@@ -27,6 +28,7 @@ import org.apache.dubbo.config.ProtocolConfig;
 import org.apache.dubbo.config.ProviderConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.model.ApplicationModel;
+import org.apache.dubbo.rpc.model.FrameworkModel;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,6 +66,7 @@ class ConfigManagerTest {
         ApplicationModel applicationModel = ApplicationModel.defaultModel();
         configManager = applicationModel.getApplicationConfigManager();
         moduleConfigManager = applicationModel.getDefaultModule().getConfigManager();
+        FrameworkModel.defaultModel().getBeanFactory().registerBean(TestPreferSerializationProvider.class);
     }
 
     @Test
@@ -467,5 +470,12 @@ class ConfigManagerTest {
         Assertions.assertFalse(moduleConfigManager.getProviders().isEmpty());
         Assertions.assertFalse(moduleConfigManager.getConsumers().isEmpty());
 
+    }
+
+    public static class TestPreferSerializationProvider implements PreferSerializationProvider {
+        @Override
+        public String getPreferSerialization() {
+            return "fastjson2,hessian2";
+        }
     }
 }

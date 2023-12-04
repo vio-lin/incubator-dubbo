@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import java.util.Optional;
 
 import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.logger.Logger;
+import org.apache.dubbo.common.logger.LoggerFactory;
 import org.apache.dubbo.common.serialize.ObjectInput;
 import org.apache.dubbo.common.serialize.ObjectOutput;
 import org.apache.dubbo.common.serialize.Serialization;
@@ -37,6 +39,19 @@ import static org.apache.dubbo.common.serialize.Constants.FASTJSON2_SERIALIZATIO
  * </pre>
  */
 public class FastJson2Serialization implements Serialization {
+    private static final Logger logger = LoggerFactory.getLogger(FastJson2Serialization.class);
+
+    static {
+        Class<?> aClass = null;
+        try {
+            aClass = com.alibaba.fastjson2.JSONB.class;
+        } catch (Throwable ignored) {
+        }
+        if (aClass == null) {
+            logger.info("Failed to load com.alibaba.fastjson2.JSONB, fastjson2 serialization will be disabled.");
+            throw new IllegalStateException("The fastjson2 is not in classpath.");
+        }
+    }
 
     @Override
     public byte getContentTypeId() {
