@@ -44,6 +44,7 @@ class ProtocolConfigTest {
     @BeforeEach
     public void setUp() {
         DubboBootstrap.reset();
+        //        FrameworkModel.defaultModel().getBeanFactory().registerBean(TestPreferSerializationProvider.class);
     }
 
     @AfterEach
@@ -234,14 +235,14 @@ class ProtocolConfigTest {
     void testMetaData() {
         ProtocolConfig config = new ProtocolConfig();
         Map<String, String> metaData = config.getMetaData();
-        Assertions.assertEquals(0, metaData.size(), "actual: "+metaData);
+        Assertions.assertEquals(0, metaData.size(), "actual: " + metaData);
     }
 
     @Test
     void testOverrideEmptyConfig() {
         int port = NetUtils.getAvailablePort();
-        //dubbo.protocol.name=rest
-        //dubbo.protocol.port=port
+        // dubbo.protocol.name=rest
+        // dubbo.protocol.port=port
         SysProps.setProperty("dubbo.protocol.name", "rest");
         SysProps.setProperty("dubbo.protocol.port", String.valueOf(port));
 
@@ -285,7 +286,7 @@ class ProtocolConfigTest {
     void testOverrideConfigById() {
         int port = NetUtils.getAvailablePort();
         SysProps.setProperty("dubbo.protocols.rest1.name", "rest");
-        SysProps.setProperty("dubbo.protocols.rest1.port",  String.valueOf(port));
+        SysProps.setProperty("dubbo.protocols.rest1.port", String.valueOf(port));
 
         try {
             ProtocolConfig protocolConfig = new ProtocolConfig();
@@ -316,8 +317,7 @@ class ProtocolConfigTest {
         try {
 
             DubboBootstrap bootstrap = DubboBootstrap.getInstance();
-            bootstrap.application("test-app")
-                    .initialize();
+            bootstrap.application("test-app").initialize();
 
             ConfigManager configManager = bootstrap.getConfigManager();
             Collection<ProtocolConfig> protocols = configManager.getProtocols();
@@ -343,8 +343,7 @@ class ProtocolConfigTest {
         try {
 
             DubboBootstrap bootstrap = DubboBootstrap.getInstance();
-            bootstrap.application("test-app")
-                    .initialize();
+            bootstrap.application("test-app").initialize();
 
             ConfigManager configManager = bootstrap.getConfigManager();
             Collection<ProtocolConfig> protocols = configManager.getProtocols();
@@ -370,8 +369,7 @@ class ProtocolConfigTest {
         try {
 
             DubboBootstrap bootstrap = DubboBootstrap.getInstance();
-            bootstrap.application("test-app")
-                    .initialize();
+            bootstrap.application("test-app").initialize();
 
             ConfigManager configManager = bootstrap.getConfigManager();
             Collection<ProtocolConfig> protocols = configManager.getProtocols();
@@ -387,14 +385,13 @@ class ProtocolConfigTest {
         }
     }
 
-
     @Test
     void testPreferSerializationDefault1() throws Exception {
         ProtocolConfig protocolConfig = new ProtocolConfig();
         assertNull(protocolConfig.getPreferSerialization());
 
         protocolConfig.checkDefault();
-        assertThat(protocolConfig.getPreferSerialization(), equalTo(DEFAULT_PREFER_SERIALIZATION));
+        assertThat(protocolConfig.getPreferSerialization(), equalTo("fastjson2,hessian2"));
 
         protocolConfig = new ProtocolConfig();
         protocolConfig.setSerialization("x-serialization");
@@ -410,7 +407,7 @@ class ProtocolConfigTest {
         assertNull(protocolConfig.getPreferSerialization());
 
         protocolConfig.refresh();
-        assertThat(protocolConfig.getPreferSerialization(), equalTo(DEFAULT_PREFER_SERIALIZATION));
+        assertThat(protocolConfig.getPreferSerialization(), equalTo("fastjson2,hessian2"));
 
         protocolConfig = new ProtocolConfig();
         protocolConfig.setSerialization("x-serialization");
@@ -419,6 +416,4 @@ class ProtocolConfigTest {
         protocolConfig.refresh();
         assertThat(protocolConfig.getPreferSerialization(), equalTo("x-serialization"));
     }
-
-
 }
