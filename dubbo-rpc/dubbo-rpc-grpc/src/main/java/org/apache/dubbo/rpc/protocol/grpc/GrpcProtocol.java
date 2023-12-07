@@ -126,7 +126,7 @@ public class GrpcProtocol extends AbstractProxyProtocol {
                     ApplicationModel.getConsumerModel(url.getServiceKey()).getReferenceConfig()
             );
             final Invoker<T> target = proxyFactory.getInvoker(stub, type, url);
-            GrpcInvoker<T> grpcInvoker = new GrpcInvoker<>(type, url, target, channel);
+            GrpcInvoker<T> grpcInvoker = new GrpcInvoker<>(type, url, target, channel, invokers);
             invokers.add(grpcInvoker);
             return grpcInvoker;
         } catch (IllegalAccessException | InvocationTargetException e) {

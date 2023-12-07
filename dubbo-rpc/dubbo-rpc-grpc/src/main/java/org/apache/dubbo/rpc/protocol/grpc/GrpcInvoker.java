@@ -26,6 +26,7 @@ import org.apache.dubbo.rpc.protocol.AbstractInvoker;
 import io.grpc.Status;
 import io.grpc.StatusException;
 
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GrpcInvoker<T> extends AbstractInvoker<T> {
@@ -33,16 +34,18 @@ public class GrpcInvoker<T> extends AbstractInvoker<T> {
 
     private final Invoker<T> target;
     private ReferenceCountManagedChannel channel;
+    private final Set<Invoker<?>> invokers;
 
 //    private static List<Exception> grpcExceptions = new ArrayList<>();
 //    static {
 //        grpcExceptions.add();
 //    }
 
-    public GrpcInvoker(Class<T> type, URL url, Invoker<T> target, ReferenceCountManagedChannel channel) {
+    public GrpcInvoker(Class<T> type, URL url, Invoker<T> target, ReferenceCountManagedChannel channel, Set<Invoker<?>> invokers) {
         super(type, url);
         this.target = target;
         this.channel = channel;
+        this.invokers = invokers;
     }
 
     @Override
@@ -85,6 +88,9 @@ public class GrpcInvoker<T> extends AbstractInvoker<T> {
                     return;
                 }
                 super.destroy();
+                if(invokers != null){
+                    invokers.remove(this);
+                }
                 channel.shutdown();
             } finally {
                 destroyLock.unlock();
