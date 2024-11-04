@@ -49,6 +49,7 @@ public class ReflectionServiceDescriptor implements ServiceDescriptor {
 
     public void addMethod(MethodDescriptor methodDescriptor) {
         methods.put(methodDescriptor.getMethodName(), Collections.singletonList(methodDescriptor));
+        initMethods();
     }
 
     public ReflectionServiceDescriptor(Class<?> interfaceClass) {
