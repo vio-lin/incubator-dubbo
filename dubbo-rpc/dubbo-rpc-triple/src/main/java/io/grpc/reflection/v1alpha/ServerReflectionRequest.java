@@ -13,997 +13,124 @@ package io.grpc.reflection.v1alpha;
 public final class ServerReflectionRequest extends
     com.google.protobuf.GeneratedMessageV3 implements
     // @@protoc_insertion_point(message_implements:grpc.reflection.v1alpha.ServerReflectionRequest)
-        ServerReflectionRequestOrBuilder {
-private static final long serialVersionUID = 0L;
-  // Use ServerReflectionRequest.newBuilder() to construct.
-  private ServerReflectionRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-    super(builder);
-  }
-  private ServerReflectionRequest() {
-    host_ = "";
-  }
-
-  @Override
-  @SuppressWarnings({"unused"})
-  protected Object newInstance(
-      UnusedPrivateParameter unused) {
-    return new ServerReflectionRequest();
-  }
-
-  public static final com.google.protobuf.Descriptors.Descriptor
-      getDescriptor() {
-    return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_descriptor;
-  }
-
-  @Override
-  protected FieldAccessorTable
-      internalGetFieldAccessorTable() {
-    return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_fieldAccessorTable
-        .ensureFieldAccessorsInitialized(
-            io.grpc.reflection.v1alpha.ServerReflectionRequest.class, io.grpc.reflection.v1alpha.ServerReflectionRequest.Builder.class);
-  }
-
-  private int messageRequestCase_ = 0;
-  @SuppressWarnings("serial")
-  private Object messageRequest_;
-  public enum MessageRequestCase
-      implements com.google.protobuf.Internal.EnumLite,
-          InternalOneOfEnum {
-    FILE_BY_FILENAME(3),
-    FILE_CONTAINING_SYMBOL(4),
-    FILE_CONTAINING_EXTENSION(5),
-    ALL_EXTENSION_NUMBERS_OF_TYPE(6),
-    LIST_SERVICES(7),
-    MESSAGEREQUEST_NOT_SET(0);
-    private final int value;
-    private MessageRequestCase(int value) {
-      this.value = value;
+    ServerReflectionRequestOrBuilder {
+    private static final long serialVersionUID = 0L;
+    // Use ServerReflectionRequest.newBuilder() to construct.
+    private ServerReflectionRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+        super(builder);
     }
-    /**
-     * @param value The number of the enum to look for.
-     * @return The enum associated with the given number.
-     * @deprecated Use {@link #forNumber(int)} instead.
-     */
-    @Deprecated
-    public static MessageRequestCase valueOf(int value) {
-      return forNumber(value);
+    private ServerReflectionRequest() {
+        host_ = "";
     }
 
-    public static MessageRequestCase forNumber(int value) {
-      switch (value) {
-        case 3: return FILE_BY_FILENAME;
-        case 4: return FILE_CONTAINING_SYMBOL;
-        case 5: return FILE_CONTAINING_EXTENSION;
-        case 6: return ALL_EXTENSION_NUMBERS_OF_TYPE;
-        case 7: return LIST_SERVICES;
-        case 0: return MESSAGEREQUEST_NOT_SET;
-        default: return null;
-      }
+    @Override
+    @SuppressWarnings({"unused"})
+    protected Object newInstance(
+        UnusedPrivateParameter unused) {
+        return new ServerReflectionRequest();
     }
-    public int getNumber() {
-      return this.value;
-    }
-  };
 
-  public MessageRequestCase
-  getMessageRequestCase() {
-    return MessageRequestCase.forNumber(
-        messageRequestCase_);
-  }
-
-  public static final int HOST_FIELD_NUMBER = 1;
-  @SuppressWarnings("serial")
-  private volatile Object host_ = "";
-  /**
-   * <code>string host = 1;</code>
-   * @return The host.
-   */
-  @Override
-  public String getHost() {
-    Object ref = host_;
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      host_ = s;
-      return s;
-    }
-  }
-  /**
-   * <code>string host = 1;</code>
-   * @return The bytes for host.
-   */
-  @Override
-  public com.google.protobuf.ByteString
-      getHostBytes() {
-    Object ref = host_;
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      host_ = b;
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int FILE_BY_FILENAME_FIELD_NUMBER = 3;
-  /**
-   * <pre>
-   * Find a proto file by the file name.
-   * </pre>
-   *
-   * <code>string file_by_filename = 3;</code>
-   * @return Whether the fileByFilename field is set.
-   */
-  public boolean hasFileByFilename() {
-    return messageRequestCase_ == 3;
-  }
-  /**
-   * <pre>
-   * Find a proto file by the file name.
-   * </pre>
-   *
-   * <code>string file_by_filename = 3;</code>
-   * @return The fileByFilename.
-   */
-  public String getFileByFilename() {
-    Object ref = "";
-    if (messageRequestCase_ == 3) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      if (messageRequestCase_ == 3) {
-        messageRequest_ = s;
-      }
-      return s;
-    }
-  }
-  /**
-   * <pre>
-   * Find a proto file by the file name.
-   * </pre>
-   *
-   * <code>string file_by_filename = 3;</code>
-   * @return The bytes for fileByFilename.
-   */
-  public com.google.protobuf.ByteString
-      getFileByFilenameBytes() {
-    Object ref = "";
-    if (messageRequestCase_ == 3) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      if (messageRequestCase_ == 3) {
-        messageRequest_ = b;
-      }
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int FILE_CONTAINING_SYMBOL_FIELD_NUMBER = 4;
-  /**
-   * <pre>
-   * Find the proto file that declares the given fully-qualified symbol name.
-   * This field should be a fully-qualified symbol name
-   * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
-   * </pre>
-   *
-   * <code>string file_containing_symbol = 4;</code>
-   * @return Whether the fileContainingSymbol field is set.
-   */
-  public boolean hasFileContainingSymbol() {
-    return messageRequestCase_ == 4;
-  }
-  /**
-   * <pre>
-   * Find the proto file that declares the given fully-qualified symbol name.
-   * This field should be a fully-qualified symbol name
-   * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
-   * </pre>
-   *
-   * <code>string file_containing_symbol = 4;</code>
-   * @return The fileContainingSymbol.
-   */
-  public String getFileContainingSymbol() {
-    Object ref = "";
-    if (messageRequestCase_ == 4) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      if (messageRequestCase_ == 4) {
-        messageRequest_ = s;
-      }
-      return s;
-    }
-  }
-  /**
-   * <pre>
-   * Find the proto file that declares the given fully-qualified symbol name.
-   * This field should be a fully-qualified symbol name
-   * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
-   * </pre>
-   *
-   * <code>string file_containing_symbol = 4;</code>
-   * @return The bytes for fileContainingSymbol.
-   */
-  public com.google.protobuf.ByteString
-      getFileContainingSymbolBytes() {
-    Object ref = "";
-    if (messageRequestCase_ == 4) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      if (messageRequestCase_ == 4) {
-        messageRequest_ = b;
-      }
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int FILE_CONTAINING_EXTENSION_FIELD_NUMBER = 5;
-  /**
-   * <pre>
-   * Find the proto file which defines an extension extending the given
-   * message type with the given field number.
-   * </pre>
-   *
-   * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-   * @return Whether the fileContainingExtension field is set.
-   */
-  @Override
-  public boolean hasFileContainingExtension() {
-    return messageRequestCase_ == 5;
-  }
-  /**
-   * <pre>
-   * Find the proto file which defines an extension extending the given
-   * message type with the given field number.
-   * </pre>
-   *
-   * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-   * @return The fileContainingExtension.
-   */
-  @Override
-  public io.grpc.reflection.v1alpha.ExtensionRequest getFileContainingExtension() {
-    if (messageRequestCase_ == 5) {
-       return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
-    }
-    return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
-  }
-  /**
-   * <pre>
-   * Find the proto file which defines an extension extending the given
-   * message type with the given field number.
-   * </pre>
-   *
-   * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-   */
-  @Override
-  public io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder getFileContainingExtensionOrBuilder() {
-    if (messageRequestCase_ == 5) {
-       return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
-    }
-    return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
-  }
-
-  public static final int ALL_EXTENSION_NUMBERS_OF_TYPE_FIELD_NUMBER = 6;
-  /**
-   * <pre>
-   * Finds the tag numbers used by all known extensions of extendee_type, and
-   * appends them to ExtensionNumberResponse in an undefined order.
-   * Its corresponding method is best-effort: it's not guaranteed that the
-   * reflection service will implement this method, and it's not guaranteed
-   * that this method will provide all extensions. Returns
-   * StatusCode::UNIMPLEMENTED if it's not implemented.
-   * This field should be a fully-qualified type name. The format is
-   * &lt;package&gt;.&lt;type&gt;
-   * </pre>
-   *
-   * <code>string all_extension_numbers_of_type = 6;</code>
-   * @return Whether the allExtensionNumbersOfType field is set.
-   */
-  public boolean hasAllExtensionNumbersOfType() {
-    return messageRequestCase_ == 6;
-  }
-  /**
-   * <pre>
-   * Finds the tag numbers used by all known extensions of extendee_type, and
-   * appends them to ExtensionNumberResponse in an undefined order.
-   * Its corresponding method is best-effort: it's not guaranteed that the
-   * reflection service will implement this method, and it's not guaranteed
-   * that this method will provide all extensions. Returns
-   * StatusCode::UNIMPLEMENTED if it's not implemented.
-   * This field should be a fully-qualified type name. The format is
-   * &lt;package&gt;.&lt;type&gt;
-   * </pre>
-   *
-   * <code>string all_extension_numbers_of_type = 6;</code>
-   * @return The allExtensionNumbersOfType.
-   */
-  public String getAllExtensionNumbersOfType() {
-    Object ref = "";
-    if (messageRequestCase_ == 6) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      if (messageRequestCase_ == 6) {
-        messageRequest_ = s;
-      }
-      return s;
-    }
-  }
-  /**
-   * <pre>
-   * Finds the tag numbers used by all known extensions of extendee_type, and
-   * appends them to ExtensionNumberResponse in an undefined order.
-   * Its corresponding method is best-effort: it's not guaranteed that the
-   * reflection service will implement this method, and it's not guaranteed
-   * that this method will provide all extensions. Returns
-   * StatusCode::UNIMPLEMENTED if it's not implemented.
-   * This field should be a fully-qualified type name. The format is
-   * &lt;package&gt;.&lt;type&gt;
-   * </pre>
-   *
-   * <code>string all_extension_numbers_of_type = 6;</code>
-   * @return The bytes for allExtensionNumbersOfType.
-   */
-  public com.google.protobuf.ByteString
-      getAllExtensionNumbersOfTypeBytes() {
-    Object ref = "";
-    if (messageRequestCase_ == 6) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      if (messageRequestCase_ == 6) {
-        messageRequest_ = b;
-      }
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  public static final int LIST_SERVICES_FIELD_NUMBER = 7;
-  /**
-   * <pre>
-   * List the full names of registered services. The content will not be
-   * checked.
-   * </pre>
-   *
-   * <code>string list_services = 7;</code>
-   * @return Whether the listServices field is set.
-   */
-  public boolean hasListServices() {
-    return messageRequestCase_ == 7;
-  }
-  /**
-   * <pre>
-   * List the full names of registered services. The content will not be
-   * checked.
-   * </pre>
-   *
-   * <code>string list_services = 7;</code>
-   * @return The listServices.
-   */
-  public String getListServices() {
-    Object ref = "";
-    if (messageRequestCase_ == 7) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      return (String) ref;
-    } else {
-      com.google.protobuf.ByteString bs = 
-          (com.google.protobuf.ByteString) ref;
-      String s = bs.toStringUtf8();
-      if (messageRequestCase_ == 7) {
-        messageRequest_ = s;
-      }
-      return s;
-    }
-  }
-  /**
-   * <pre>
-   * List the full names of registered services. The content will not be
-   * checked.
-   * </pre>
-   *
-   * <code>string list_services = 7;</code>
-   * @return The bytes for listServices.
-   */
-  public com.google.protobuf.ByteString
-      getListServicesBytes() {
-    Object ref = "";
-    if (messageRequestCase_ == 7) {
-      ref = messageRequest_;
-    }
-    if (ref instanceof String) {
-      com.google.protobuf.ByteString b = 
-          com.google.protobuf.ByteString.copyFromUtf8(
-              (String) ref);
-      if (messageRequestCase_ == 7) {
-        messageRequest_ = b;
-      }
-      return b;
-    } else {
-      return (com.google.protobuf.ByteString) ref;
-    }
-  }
-
-  private byte memoizedIsInitialized = -1;
-  @Override
-  public final boolean isInitialized() {
-    byte isInitialized = memoizedIsInitialized;
-    if (isInitialized == 1) return true;
-    if (isInitialized == 0) return false;
-
-    memoizedIsInitialized = 1;
-    return true;
-  }
-
-  @Override
-  public void writeTo(com.google.protobuf.CodedOutputStream output)
-                      throws java.io.IOException {
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(host_)) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, host_);
-    }
-    if (messageRequestCase_ == 3) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, messageRequest_);
-    }
-    if (messageRequestCase_ == 4) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageRequest_);
-    }
-    if (messageRequestCase_ == 5) {
-      output.writeMessage(5, (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_);
-    }
-    if (messageRequestCase_ == 6) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 6, messageRequest_);
-    }
-    if (messageRequestCase_ == 7) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 7, messageRequest_);
-    }
-    getUnknownFields().writeTo(output);
-  }
-
-  @Override
-  public int getSerializedSize() {
-    int size = memoizedSize;
-    if (size != -1) return size;
-
-    size = 0;
-    if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(host_)) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, host_);
-    }
-    if (messageRequestCase_ == 3) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, messageRequest_);
-    }
-    if (messageRequestCase_ == 4) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageRequest_);
-    }
-    if (messageRequestCase_ == 5) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeMessageSize(5, (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_);
-    }
-    if (messageRequestCase_ == 6) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, messageRequest_);
-    }
-    if (messageRequestCase_ == 7) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, messageRequest_);
-    }
-    size += getUnknownFields().getSerializedSize();
-    memoizedSize = size;
-    return size;
-  }
-
-  @Override
-  public boolean equals(final Object obj) {
-    if (obj == this) {
-     return true;
-    }
-    if (!(obj instanceof io.grpc.reflection.v1alpha.ServerReflectionRequest)) {
-      return super.equals(obj);
-    }
-    io.grpc.reflection.v1alpha.ServerReflectionRequest other = (io.grpc.reflection.v1alpha.ServerReflectionRequest) obj;
-
-    if (!getHost()
-        .equals(other.getHost())) return false;
-    if (!getMessageRequestCase().equals(other.getMessageRequestCase())) return false;
-    switch (messageRequestCase_) {
-      case 3:
-        if (!getFileByFilename()
-            .equals(other.getFileByFilename())) return false;
-        break;
-      case 4:
-        if (!getFileContainingSymbol()
-            .equals(other.getFileContainingSymbol())) return false;
-        break;
-      case 5:
-        if (!getFileContainingExtension()
-            .equals(other.getFileContainingExtension())) return false;
-        break;
-      case 6:
-        if (!getAllExtensionNumbersOfType()
-            .equals(other.getAllExtensionNumbersOfType())) return false;
-        break;
-      case 7:
-        if (!getListServices()
-            .equals(other.getListServices())) return false;
-        break;
-      case 0:
-      default:
-    }
-    if (!getUnknownFields().equals(other.getUnknownFields())) return false;
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    if (memoizedHashCode != 0) {
-      return memoizedHashCode;
-    }
-    int hash = 41;
-    hash = (19 * hash) + getDescriptor().hashCode();
-    hash = (37 * hash) + HOST_FIELD_NUMBER;
-    hash = (53 * hash) + getHost().hashCode();
-    switch (messageRequestCase_) {
-      case 3:
-        hash = (37 * hash) + FILE_BY_FILENAME_FIELD_NUMBER;
-        hash = (53 * hash) + getFileByFilename().hashCode();
-        break;
-      case 4:
-        hash = (37 * hash) + FILE_CONTAINING_SYMBOL_FIELD_NUMBER;
-        hash = (53 * hash) + getFileContainingSymbol().hashCode();
-        break;
-      case 5:
-        hash = (37 * hash) + FILE_CONTAINING_EXTENSION_FIELD_NUMBER;
-        hash = (53 * hash) + getFileContainingExtension().hashCode();
-        break;
-      case 6:
-        hash = (37 * hash) + ALL_EXTENSION_NUMBERS_OF_TYPE_FIELD_NUMBER;
-        hash = (53 * hash) + getAllExtensionNumbersOfType().hashCode();
-        break;
-      case 7:
-        hash = (37 * hash) + LIST_SERVICES_FIELD_NUMBER;
-        hash = (53 * hash) + getListServices().hashCode();
-        break;
-      case 0:
-      default:
-    }
-    hash = (29 * hash) + getUnknownFields().hashCode();
-    memoizedHashCode = hash;
-    return hash;
-  }
-
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      java.nio.ByteBuffer data)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    return PARSER.parseFrom(data);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      java.nio.ByteBuffer data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    return PARSER.parseFrom(data, extensionRegistry);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      com.google.protobuf.ByteString data)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    return PARSER.parseFrom(data);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      com.google.protobuf.ByteString data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    return PARSER.parseFrom(data, extensionRegistry);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(byte[] data)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    return PARSER.parseFrom(data);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      byte[] data,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws com.google.protobuf.InvalidProtocolBufferException {
-    return PARSER.parseFrom(data, extensionRegistry);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseDelimitedFrom(java.io.InputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseDelimitedFrom(
-      java.io.InputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      com.google.protobuf.CodedInputStream input)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input);
-  }
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
-      com.google.protobuf.CodedInputStream input,
-      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-      throws java.io.IOException {
-    return com.google.protobuf.GeneratedMessageV3
-        .parseWithIOException(PARSER, input, extensionRegistry);
-  }
-
-  @Override
-  public Builder newBuilderForType() { return newBuilder(); }
-  public static Builder newBuilder() {
-    return DEFAULT_INSTANCE.toBuilder();
-  }
-  public static Builder newBuilder(io.grpc.reflection.v1alpha.ServerReflectionRequest prototype) {
-    return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-  }
-  @Override
-  public Builder toBuilder() {
-    return this == DEFAULT_INSTANCE
-        ? new Builder() : new Builder().mergeFrom(this);
-  }
-
-  @Override
-  protected Builder newBuilderForType(
-      BuilderParent parent) {
-    Builder builder = new Builder(parent);
-    return builder;
-  }
-  /**
-   * <pre>
-   * The message sent by the client when calling ServerReflectionInfo method.
-   * </pre>
-   *
-   * Protobuf type {@code grpc.reflection.v1alpha.ServerReflectionRequest}
-   */
-  public static final class Builder extends
-      com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-      // @@protoc_insertion_point(builder_implements:grpc.reflection.v1alpha.ServerReflectionRequest)
-      ServerReflectionRequestOrBuilder {
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_descriptor;
+    getDescriptor() {
+        return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              io.grpc.reflection.v1alpha.ServerReflectionRequest.class, io.grpc.reflection.v1alpha.ServerReflectionRequest.Builder.class);
+    internalGetFieldAccessorTable() {
+        return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                io.grpc.reflection.v1alpha.ServerReflectionRequest.class, io.grpc.reflection.v1alpha.ServerReflectionRequest.Builder.class);
     }
 
-    // Construct using io.grpc.reflection.v1alpha.ServerReflectionRequest.newBuilder()
-    private Builder() {
-
-    }
-
-    private Builder(
-        BuilderParent parent) {
-      super(parent);
-
-    }
-    @Override
-    public Builder clear() {
-      super.clear();
-      bitField0_ = 0;
-      host_ = "";
-      if (fileContainingExtensionBuilder_ != null) {
-        fileContainingExtensionBuilder_.clear();
-      }
-      messageRequestCase_ = 0;
-      messageRequest_ = null;
-      return this;
-    }
-
-    @Override
-    public com.google.protobuf.Descriptors.Descriptor
-        getDescriptorForType() {
-      return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_descriptor;
-    }
-
-    @Override
-    public io.grpc.reflection.v1alpha.ServerReflectionRequest getDefaultInstanceForType() {
-      return getDefaultInstance();
-    }
-
-    @Override
-    public io.grpc.reflection.v1alpha.ServerReflectionRequest build() {
-      io.grpc.reflection.v1alpha.ServerReflectionRequest result = buildPartial();
-      if (!result.isInitialized()) {
-        throw newUninitializedMessageException(result);
-      }
-      return result;
-    }
-
-    @Override
-    public io.grpc.reflection.v1alpha.ServerReflectionRequest buildPartial() {
-      io.grpc.reflection.v1alpha.ServerReflectionRequest result = new io.grpc.reflection.v1alpha.ServerReflectionRequest(this);
-      if (bitField0_ != 0) { buildPartial0(result); }
-      buildPartialOneofs(result);
-      onBuilt();
-      return result;
-    }
-
-    private void buildPartial0(io.grpc.reflection.v1alpha.ServerReflectionRequest result) {
-      int from_bitField0_ = bitField0_;
-      if (((from_bitField0_ & 0x00000001) != 0)) {
-        result.host_ = host_;
-      }
-    }
-
-    private void buildPartialOneofs(io.grpc.reflection.v1alpha.ServerReflectionRequest result) {
-      result.messageRequestCase_ = messageRequestCase_;
-      result.messageRequest_ = this.messageRequest_;
-      if (messageRequestCase_ == 5 &&
-          fileContainingExtensionBuilder_ != null) {
-        result.messageRequest_ = fileContainingExtensionBuilder_.build();
-      }
-    }
-
-    @Override
-    public Builder mergeFrom(com.google.protobuf.Message other) {
-      if (other instanceof io.grpc.reflection.v1alpha.ServerReflectionRequest) {
-        return mergeFrom((io.grpc.reflection.v1alpha.ServerReflectionRequest)other);
-      } else {
-        super.mergeFrom(other);
-        return this;
-      }
-    }
-
-    public Builder mergeFrom(io.grpc.reflection.v1alpha.ServerReflectionRequest other) {
-      if (other == getDefaultInstance()) return this;
-      if (!other.getHost().isEmpty()) {
-        host_ = other.host_;
-        bitField0_ |= 0x00000001;
-        onChanged();
-      }
-      switch (other.getMessageRequestCase()) {
-        case FILE_BY_FILENAME: {
-          messageRequestCase_ = 3;
-          messageRequest_ = other.messageRequest_;
-          onChanged();
-          break;
-        }
-        case FILE_CONTAINING_SYMBOL: {
-          messageRequestCase_ = 4;
-          messageRequest_ = other.messageRequest_;
-          onChanged();
-          break;
-        }
-        case FILE_CONTAINING_EXTENSION: {
-          mergeFileContainingExtension(other.getFileContainingExtension());
-          break;
-        }
-        case ALL_EXTENSION_NUMBERS_OF_TYPE: {
-          messageRequestCase_ = 6;
-          messageRequest_ = other.messageRequest_;
-          onChanged();
-          break;
-        }
-        case LIST_SERVICES: {
-          messageRequestCase_ = 7;
-          messageRequest_ = other.messageRequest_;
-          onChanged();
-          break;
-        }
-        case MESSAGEREQUEST_NOT_SET: {
-          break;
-        }
-      }
-      this.mergeUnknownFields(other.getUnknownFields());
-      onChanged();
-      return this;
-    }
-
-    @Override
-    public final boolean isInitialized() {
-      return true;
-    }
-
-    @Override
-    public Builder mergeFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              host_ = input.readStringRequireUtf8();
-              bitField0_ |= 0x00000001;
-              break;
-            } // case 10
-            case 26: {
-              String s = input.readStringRequireUtf8();
-              messageRequestCase_ = 3;
-              messageRequest_ = s;
-              break;
-            } // case 26
-            case 34: {
-              String s = input.readStringRequireUtf8();
-              messageRequestCase_ = 4;
-              messageRequest_ = s;
-              break;
-            } // case 34
-            case 42: {
-              input.readMessage(
-                  getFileContainingExtensionFieldBuilder().getBuilder(),
-                  extensionRegistry);
-              messageRequestCase_ = 5;
-              break;
-            } // case 42
-            case 50: {
-              String s = input.readStringRequireUtf8();
-              messageRequestCase_ = 6;
-              messageRequest_ = s;
-              break;
-            } // case 50
-            case 58: {
-              String s = input.readStringRequireUtf8();
-              messageRequestCase_ = 7;
-              messageRequest_ = s;
-              break;
-            } // case 58
-            default: {
-              if (!super.parseUnknownField(input, extensionRegistry, tag)) {
-                done = true; // was an endgroup tag
-              }
-              break;
-            } // default:
-          } // switch (tag)
-        } // while (!done)
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.unwrapIOException();
-      } finally {
-        onChanged();
-      } // finally
-      return this;
-    }
     private int messageRequestCase_ = 0;
+    @SuppressWarnings("serial")
     private Object messageRequest_;
+    public enum MessageRequestCase
+        implements com.google.protobuf.Internal.EnumLite,
+        InternalOneOfEnum {
+        FILE_BY_FILENAME(3),
+        FILE_CONTAINING_SYMBOL(4),
+        FILE_CONTAINING_EXTENSION(5),
+        ALL_EXTENSION_NUMBERS_OF_TYPE(6),
+        LIST_SERVICES(7),
+        MESSAGEREQUEST_NOT_SET(0);
+        private final int value;
+        private MessageRequestCase(int value) {
+            this.value = value;
+        }
+        /**
+         * @param value The number of the enum to look for.
+         * @return The enum associated with the given number.
+         * @deprecated Use {@link #forNumber(int)} instead.
+         */
+        @Deprecated
+        public static MessageRequestCase valueOf(int value) {
+            return forNumber(value);
+        }
+
+        public static MessageRequestCase forNumber(int value) {
+            switch (value) {
+                case 3: return FILE_BY_FILENAME;
+                case 4: return FILE_CONTAINING_SYMBOL;
+                case 5: return FILE_CONTAINING_EXTENSION;
+                case 6: return ALL_EXTENSION_NUMBERS_OF_TYPE;
+                case 7: return LIST_SERVICES;
+                case 0: return MESSAGEREQUEST_NOT_SET;
+                default: return null;
+            }
+        }
+        public int getNumber() {
+            return this.value;
+        }
+    };
+
     public MessageRequestCase
-        getMessageRequestCase() {
-      return MessageRequestCase.forNumber(
-          messageRequestCase_);
+    getMessageRequestCase() {
+        return MessageRequestCase.forNumber(
+            messageRequestCase_);
     }
 
-    public Builder clearMessageRequest() {
-      messageRequestCase_ = 0;
-      messageRequest_ = null;
-      onChanged();
-      return this;
-    }
-
-    private int bitField0_;
-
-    private Object host_ = "";
+    public static final int HOST_FIELD_NUMBER = 1;
+    @SuppressWarnings("serial")
+    private volatile Object host_ = "";
     /**
      * <code>string host = 1;</code>
      * @return The host.
      */
+    @Override
     public String getHost() {
-      Object ref = host_;
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        host_ = s;
-        return s;
-      } else {
-        return (String) ref;
-      }
+        Object ref = host_;
+        if (ref instanceof String) {
+            return (String) ref;
+        } else {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            String s = bs.toStringUtf8();
+            host_ = s;
+            return s;
+        }
     }
     /**
      * <code>string host = 1;</code>
      * @return The bytes for host.
      */
+    @Override
     public com.google.protobuf.ByteString
-        getHostBytes() {
-      Object ref = host_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        host_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <code>string host = 1;</code>
-     * @param value The host to set.
-     * @return This builder for chaining.
-     */
-    public Builder setHost(
-        String value) {
-      if (value == null) { throw new NullPointerException(); }
-      host_ = value;
-      bitField0_ |= 0x00000001;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string host = 1;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearHost() {
-      host_ = getDefaultInstance().getHost();
-      bitField0_ = (bitField0_ & ~0x00000001);
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>string host = 1;</code>
-     * @param value The bytes for host to set.
-     * @return This builder for chaining.
-     */
-    public Builder setHostBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      host_ = value;
-      bitField0_ |= 0x00000001;
-      onChanged();
-      return this;
+    getHostBytes() {
+        Object ref = host_;
+        if (ref instanceof String) {
+            com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (String) ref);
+            host_ = b;
+            return b;
+        } else {
+            return (com.google.protobuf.ByteString) ref;
+        }
     }
 
+    public static final int FILE_BY_FILENAME_FIELD_NUMBER = 3;
     /**
      * <pre>
      * Find a proto file by the file name.
@@ -1012,9 +139,8 @@ private static final long serialVersionUID = 0L;
      * <code>string file_by_filename = 3;</code>
      * @return Whether the fileByFilename field is set.
      */
-    @Override
     public boolean hasFileByFilename() {
-      return messageRequestCase_ == 3;
+        return messageRequestCase_ == 3;
     }
     /**
      * <pre>
@@ -1024,23 +150,22 @@ private static final long serialVersionUID = 0L;
      * <code>string file_by_filename = 3;</code>
      * @return The fileByFilename.
      */
-    @Override
     public String getFileByFilename() {
-      Object ref = "";
-      if (messageRequestCase_ == 3) {
-        ref = messageRequest_;
-      }
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        Object ref = "";
         if (messageRequestCase_ == 3) {
-          messageRequest_ = s;
+            ref = messageRequest_;
         }
-        return s;
-      } else {
-        return (String) ref;
-      }
+        if (ref instanceof String) {
+            return (String) ref;
+        } else {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            String s = bs.toStringUtf8();
+            if (messageRequestCase_ == 3) {
+                messageRequest_ = s;
+            }
+            return s;
+        }
     }
     /**
      * <pre>
@@ -1050,77 +175,26 @@ private static final long serialVersionUID = 0L;
      * <code>string file_by_filename = 3;</code>
      * @return The bytes for fileByFilename.
      */
-    @Override
     public com.google.protobuf.ByteString
-        getFileByFilenameBytes() {
-      Object ref = "";
-      if (messageRequestCase_ == 3) {
-        ref = messageRequest_;
-      }
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+    getFileByFilenameBytes() {
+        Object ref = "";
         if (messageRequestCase_ == 3) {
-          messageRequest_ = b;
+            ref = messageRequest_;
         }
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <pre>
-     * Find a proto file by the file name.
-     * </pre>
-     *
-     * <code>string file_by_filename = 3;</code>
-     * @param value The fileByFilename to set.
-     * @return This builder for chaining.
-     */
-    public Builder setFileByFilename(
-        String value) {
-      if (value == null) { throw new NullPointerException(); }
-      messageRequestCase_ = 3;
-      messageRequest_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * Find a proto file by the file name.
-     * </pre>
-     *
-     * <code>string file_by_filename = 3;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearFileByFilename() {
-      if (messageRequestCase_ == 3) {
-        messageRequestCase_ = 0;
-        messageRequest_ = null;
-        onChanged();
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Find a proto file by the file name.
-     * </pre>
-     *
-     * <code>string file_by_filename = 3;</code>
-     * @param value The bytes for fileByFilename to set.
-     * @return This builder for chaining.
-     */
-    public Builder setFileByFilenameBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      messageRequestCase_ = 3;
-      messageRequest_ = value;
-      onChanged();
-      return this;
+        if (ref instanceof String) {
+            com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (String) ref);
+            if (messageRequestCase_ == 3) {
+                messageRequest_ = b;
+            }
+            return b;
+        } else {
+            return (com.google.protobuf.ByteString) ref;
+        }
     }
 
+    public static final int FILE_CONTAINING_SYMBOL_FIELD_NUMBER = 4;
     /**
      * <pre>
      * Find the proto file that declares the given fully-qualified symbol name.
@@ -1131,9 +205,8 @@ private static final long serialVersionUID = 0L;
      * <code>string file_containing_symbol = 4;</code>
      * @return Whether the fileContainingSymbol field is set.
      */
-    @Override
     public boolean hasFileContainingSymbol() {
-      return messageRequestCase_ == 4;
+        return messageRequestCase_ == 4;
     }
     /**
      * <pre>
@@ -1145,23 +218,22 @@ private static final long serialVersionUID = 0L;
      * <code>string file_containing_symbol = 4;</code>
      * @return The fileContainingSymbol.
      */
-    @Override
     public String getFileContainingSymbol() {
-      Object ref = "";
-      if (messageRequestCase_ == 4) {
-        ref = messageRequest_;
-      }
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        Object ref = "";
         if (messageRequestCase_ == 4) {
-          messageRequest_ = s;
+            ref = messageRequest_;
         }
-        return s;
-      } else {
-        return (String) ref;
-      }
+        if (ref instanceof String) {
+            return (String) ref;
+        } else {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            String s = bs.toStringUtf8();
+            if (messageRequestCase_ == 4) {
+                messageRequest_ = s;
+            }
+            return s;
+        }
     }
     /**
      * <pre>
@@ -1173,85 +245,26 @@ private static final long serialVersionUID = 0L;
      * <code>string file_containing_symbol = 4;</code>
      * @return The bytes for fileContainingSymbol.
      */
-    @Override
     public com.google.protobuf.ByteString
-        getFileContainingSymbolBytes() {
-      Object ref = "";
-      if (messageRequestCase_ == 4) {
-        ref = messageRequest_;
-      }
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+    getFileContainingSymbolBytes() {
+        Object ref = "";
         if (messageRequestCase_ == 4) {
-          messageRequest_ = b;
+            ref = messageRequest_;
         }
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <pre>
-     * Find the proto file that declares the given fully-qualified symbol name.
-     * This field should be a fully-qualified symbol name
-     * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
-     * </pre>
-     *
-     * <code>string file_containing_symbol = 4;</code>
-     * @param value The fileContainingSymbol to set.
-     * @return This builder for chaining.
-     */
-    public Builder setFileContainingSymbol(
-        String value) {
-      if (value == null) { throw new NullPointerException(); }
-      messageRequestCase_ = 4;
-      messageRequest_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * Find the proto file that declares the given fully-qualified symbol name.
-     * This field should be a fully-qualified symbol name
-     * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
-     * </pre>
-     *
-     * <code>string file_containing_symbol = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearFileContainingSymbol() {
-      if (messageRequestCase_ == 4) {
-        messageRequestCase_ = 0;
-        messageRequest_ = null;
-        onChanged();
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Find the proto file that declares the given fully-qualified symbol name.
-     * This field should be a fully-qualified symbol name
-     * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
-     * </pre>
-     *
-     * <code>string file_containing_symbol = 4;</code>
-     * @param value The bytes for fileContainingSymbol to set.
-     * @return This builder for chaining.
-     */
-    public Builder setFileContainingSymbolBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      messageRequestCase_ = 4;
-      messageRequest_ = value;
-      onChanged();
-      return this;
+        if (ref instanceof String) {
+            com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (String) ref);
+            if (messageRequestCase_ == 4) {
+                messageRequest_ = b;
+            }
+            return b;
+        } else {
+            return (com.google.protobuf.ByteString) ref;
+        }
     }
 
-    private com.google.protobuf.SingleFieldBuilderV3<
-        io.grpc.reflection.v1alpha.ExtensionRequest, io.grpc.reflection.v1alpha.ExtensionRequest.Builder, io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder> fileContainingExtensionBuilder_;
+    public static final int FILE_CONTAINING_EXTENSION_FIELD_NUMBER = 5;
     /**
      * <pre>
      * Find the proto file which defines an extension extending the given
@@ -1263,7 +276,7 @@ private static final long serialVersionUID = 0L;
      */
     @Override
     public boolean hasFileContainingExtension() {
-      return messageRequestCase_ == 5;
+        return messageRequestCase_ == 5;
     }
     /**
      * <pre>
@@ -1276,120 +289,10 @@ private static final long serialVersionUID = 0L;
      */
     @Override
     public io.grpc.reflection.v1alpha.ExtensionRequest getFileContainingExtension() {
-      if (fileContainingExtensionBuilder_ == null) {
         if (messageRequestCase_ == 5) {
-          return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
+            return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
         }
         return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
-      } else {
-        if (messageRequestCase_ == 5) {
-          return fileContainingExtensionBuilder_.getMessage();
-        }
-        return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
-      }
-    }
-    /**
-     * <pre>
-     * Find the proto file which defines an extension extending the given
-     * message type with the given field number.
-     * </pre>
-     *
-     * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-     */
-    public Builder setFileContainingExtension(io.grpc.reflection.v1alpha.ExtensionRequest value) {
-      if (fileContainingExtensionBuilder_ == null) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        messageRequest_ = value;
-        onChanged();
-      } else {
-        fileContainingExtensionBuilder_.setMessage(value);
-      }
-      messageRequestCase_ = 5;
-      return this;
-    }
-    /**
-     * <pre>
-     * Find the proto file which defines an extension extending the given
-     * message type with the given field number.
-     * </pre>
-     *
-     * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-     */
-    public Builder setFileContainingExtension(
-        io.grpc.reflection.v1alpha.ExtensionRequest.Builder builderForValue) {
-      if (fileContainingExtensionBuilder_ == null) {
-        messageRequest_ = builderForValue.build();
-        onChanged();
-      } else {
-        fileContainingExtensionBuilder_.setMessage(builderForValue.build());
-      }
-      messageRequestCase_ = 5;
-      return this;
-    }
-    /**
-     * <pre>
-     * Find the proto file which defines an extension extending the given
-     * message type with the given field number.
-     * </pre>
-     *
-     * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-     */
-    public Builder mergeFileContainingExtension(io.grpc.reflection.v1alpha.ExtensionRequest value) {
-      if (fileContainingExtensionBuilder_ == null) {
-        if (messageRequestCase_ == 5 &&
-            messageRequest_ != io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance()) {
-          messageRequest_ = io.grpc.reflection.v1alpha.ExtensionRequest.newBuilder((io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_)
-              .mergeFrom(value).buildPartial();
-        } else {
-          messageRequest_ = value;
-        }
-        onChanged();
-      } else {
-        if (messageRequestCase_ == 5) {
-          fileContainingExtensionBuilder_.mergeFrom(value);
-        } else {
-          fileContainingExtensionBuilder_.setMessage(value);
-        }
-      }
-      messageRequestCase_ = 5;
-      return this;
-    }
-    /**
-     * <pre>
-     * Find the proto file which defines an extension extending the given
-     * message type with the given field number.
-     * </pre>
-     *
-     * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-     */
-    public Builder clearFileContainingExtension() {
-      if (fileContainingExtensionBuilder_ == null) {
-        if (messageRequestCase_ == 5) {
-          messageRequestCase_ = 0;
-          messageRequest_ = null;
-          onChanged();
-        }
-      } else {
-        if (messageRequestCase_ == 5) {
-          messageRequestCase_ = 0;
-          messageRequest_ = null;
-        }
-        fileContainingExtensionBuilder_.clear();
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Find the proto file which defines an extension extending the given
-     * message type with the given field number.
-     * </pre>
-     *
-     * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-     */
-    public io.grpc.reflection.v1alpha.ExtensionRequest.Builder getFileContainingExtensionBuilder() {
-      return getFileContainingExtensionFieldBuilder().getBuilder();
     }
     /**
      * <pre>
@@ -1401,42 +304,13 @@ private static final long serialVersionUID = 0L;
      */
     @Override
     public io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder getFileContainingExtensionOrBuilder() {
-      if ((messageRequestCase_ == 5) && (fileContainingExtensionBuilder_ != null)) {
-        return fileContainingExtensionBuilder_.getMessageOrBuilder();
-      } else {
         if (messageRequestCase_ == 5) {
-          return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
+            return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
         }
         return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
-      }
-    }
-    /**
-     * <pre>
-     * Find the proto file which defines an extension extending the given
-     * message type with the given field number.
-     * </pre>
-     *
-     * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
-     */
-    private com.google.protobuf.SingleFieldBuilderV3<
-        io.grpc.reflection.v1alpha.ExtensionRequest, io.grpc.reflection.v1alpha.ExtensionRequest.Builder, io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder> 
-        getFileContainingExtensionFieldBuilder() {
-      if (fileContainingExtensionBuilder_ == null) {
-        if (!(messageRequestCase_ == 5)) {
-          messageRequest_ = io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
-        }
-        fileContainingExtensionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-            io.grpc.reflection.v1alpha.ExtensionRequest, io.grpc.reflection.v1alpha.ExtensionRequest.Builder, io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder>(
-                (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_,
-                getParentForChildren(),
-                isClean());
-        messageRequest_ = null;
-      }
-      messageRequestCase_ = 5;
-      onChanged();
-      return fileContainingExtensionBuilder_;
     }
 
+    public static final int ALL_EXTENSION_NUMBERS_OF_TYPE_FIELD_NUMBER = 6;
     /**
      * <pre>
      * Finds the tag numbers used by all known extensions of extendee_type, and
@@ -1452,9 +326,8 @@ private static final long serialVersionUID = 0L;
      * <code>string all_extension_numbers_of_type = 6;</code>
      * @return Whether the allExtensionNumbersOfType field is set.
      */
-    @Override
     public boolean hasAllExtensionNumbersOfType() {
-      return messageRequestCase_ == 6;
+        return messageRequestCase_ == 6;
     }
     /**
      * <pre>
@@ -1471,23 +344,22 @@ private static final long serialVersionUID = 0L;
      * <code>string all_extension_numbers_of_type = 6;</code>
      * @return The allExtensionNumbersOfType.
      */
-    @Override
     public String getAllExtensionNumbersOfType() {
-      Object ref = "";
-      if (messageRequestCase_ == 6) {
-        ref = messageRequest_;
-      }
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        Object ref = "";
         if (messageRequestCase_ == 6) {
-          messageRequest_ = s;
+            ref = messageRequest_;
         }
-        return s;
-      } else {
-        return (String) ref;
-      }
+        if (ref instanceof String) {
+            return (String) ref;
+        } else {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            String s = bs.toStringUtf8();
+            if (messageRequestCase_ == 6) {
+                messageRequest_ = s;
+            }
+            return s;
+        }
     }
     /**
      * <pre>
@@ -1504,98 +376,26 @@ private static final long serialVersionUID = 0L;
      * <code>string all_extension_numbers_of_type = 6;</code>
      * @return The bytes for allExtensionNumbersOfType.
      */
-    @Override
     public com.google.protobuf.ByteString
-        getAllExtensionNumbersOfTypeBytes() {
-      Object ref = "";
-      if (messageRequestCase_ == 6) {
-        ref = messageRequest_;
-      }
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+    getAllExtensionNumbersOfTypeBytes() {
+        Object ref = "";
         if (messageRequestCase_ == 6) {
-          messageRequest_ = b;
+            ref = messageRequest_;
         }
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    /**
-     * <pre>
-     * Finds the tag numbers used by all known extensions of extendee_type, and
-     * appends them to ExtensionNumberResponse in an undefined order.
-     * Its corresponding method is best-effort: it's not guaranteed that the
-     * reflection service will implement this method, and it's not guaranteed
-     * that this method will provide all extensions. Returns
-     * StatusCode::UNIMPLEMENTED if it's not implemented.
-     * This field should be a fully-qualified type name. The format is
-     * &lt;package&gt;.&lt;type&gt;
-     * </pre>
-     *
-     * <code>string all_extension_numbers_of_type = 6;</code>
-     * @param value The allExtensionNumbersOfType to set.
-     * @return This builder for chaining.
-     */
-    public Builder setAllExtensionNumbersOfType(
-        String value) {
-      if (value == null) { throw new NullPointerException(); }
-      messageRequestCase_ = 6;
-      messageRequest_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * Finds the tag numbers used by all known extensions of extendee_type, and
-     * appends them to ExtensionNumberResponse in an undefined order.
-     * Its corresponding method is best-effort: it's not guaranteed that the
-     * reflection service will implement this method, and it's not guaranteed
-     * that this method will provide all extensions. Returns
-     * StatusCode::UNIMPLEMENTED if it's not implemented.
-     * This field should be a fully-qualified type name. The format is
-     * &lt;package&gt;.&lt;type&gt;
-     * </pre>
-     *
-     * <code>string all_extension_numbers_of_type = 6;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearAllExtensionNumbersOfType() {
-      if (messageRequestCase_ == 6) {
-        messageRequestCase_ = 0;
-        messageRequest_ = null;
-        onChanged();
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * Finds the tag numbers used by all known extensions of extendee_type, and
-     * appends them to ExtensionNumberResponse in an undefined order.
-     * Its corresponding method is best-effort: it's not guaranteed that the
-     * reflection service will implement this method, and it's not guaranteed
-     * that this method will provide all extensions. Returns
-     * StatusCode::UNIMPLEMENTED if it's not implemented.
-     * This field should be a fully-qualified type name. The format is
-     * &lt;package&gt;.&lt;type&gt;
-     * </pre>
-     *
-     * <code>string all_extension_numbers_of_type = 6;</code>
-     * @param value The bytes for allExtensionNumbersOfType to set.
-     * @return This builder for chaining.
-     */
-    public Builder setAllExtensionNumbersOfTypeBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      messageRequestCase_ = 6;
-      messageRequest_ = value;
-      onChanged();
-      return this;
+        if (ref instanceof String) {
+            com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (String) ref);
+            if (messageRequestCase_ == 6) {
+                messageRequest_ = b;
+            }
+            return b;
+        } else {
+            return (com.google.protobuf.ByteString) ref;
+        }
     }
 
+    public static final int LIST_SERVICES_FIELD_NUMBER = 7;
     /**
      * <pre>
      * List the full names of registered services. The content will not be
@@ -1605,9 +405,8 @@ private static final long serialVersionUID = 0L;
      * <code>string list_services = 7;</code>
      * @return Whether the listServices field is set.
      */
-    @Override
     public boolean hasListServices() {
-      return messageRequestCase_ == 7;
+        return messageRequestCase_ == 7;
     }
     /**
      * <pre>
@@ -1618,23 +417,22 @@ private static final long serialVersionUID = 0L;
      * <code>string list_services = 7;</code>
      * @return The listServices.
      */
-    @Override
     public String getListServices() {
-      Object ref = "";
-      if (messageRequestCase_ == 7) {
-        ref = messageRequest_;
-      }
-      if (!(ref instanceof String)) {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
+        Object ref = "";
         if (messageRequestCase_ == 7) {
-          messageRequest_ = s;
+            ref = messageRequest_;
         }
-        return s;
-      } else {
-        return (String) ref;
-      }
+        if (ref instanceof String) {
+            return (String) ref;
+        } else {
+            com.google.protobuf.ByteString bs =
+                (com.google.protobuf.ByteString) ref;
+            String s = bs.toStringUtf8();
+            if (messageRequestCase_ == 7) {
+                messageRequest_ = s;
+            }
+            return s;
+        }
     }
     /**
      * <pre>
@@ -1645,140 +443,1342 @@ private static final long serialVersionUID = 0L;
      * <code>string list_services = 7;</code>
      * @return The bytes for listServices.
      */
-    @Override
     public com.google.protobuf.ByteString
-        getListServicesBytes() {
-      Object ref = "";
-      if (messageRequestCase_ == 7) {
-        ref = messageRequest_;
-      }
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
+    getListServicesBytes() {
+        Object ref = "";
         if (messageRequestCase_ == 7) {
-          messageRequest_ = b;
+            ref = messageRequest_;
         }
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+        if (ref instanceof String) {
+            com.google.protobuf.ByteString b =
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (String) ref);
+            if (messageRequestCase_ == 7) {
+                messageRequest_ = b;
+            }
+            return b;
+        } else {
+            return (com.google.protobuf.ByteString) ref;
+        }
     }
-    /**
-     * <pre>
-     * List the full names of registered services. The content will not be
-     * checked.
-     * </pre>
-     *
-     * <code>string list_services = 7;</code>
-     * @param value The listServices to set.
-     * @return This builder for chaining.
-     */
-    public Builder setListServices(
-        String value) {
-      if (value == null) { throw new NullPointerException(); }
-      messageRequestCase_ = 7;
-      messageRequest_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <pre>
-     * List the full names of registered services. The content will not be
-     * checked.
-     * </pre>
-     *
-     * <code>string list_services = 7;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearListServices() {
-      if (messageRequestCase_ == 7) {
-        messageRequestCase_ = 0;
-        messageRequest_ = null;
-        onChanged();
-      }
-      return this;
-    }
-    /**
-     * <pre>
-     * List the full names of registered services. The content will not be
-     * checked.
-     * </pre>
-     *
-     * <code>string list_services = 7;</code>
-     * @param value The bytes for listServices to set.
-     * @return This builder for chaining.
-     */
-    public Builder setListServicesBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) { throw new NullPointerException(); }
-      checkByteStringIsUtf8(value);
-      messageRequestCase_ = 7;
-      messageRequest_ = value;
-      onChanged();
-      return this;
-    }
+
+    private byte memoizedIsInitialized = -1;
     @Override
-    public final Builder setUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
-      return super.setUnknownFields(unknownFields);
+    public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized == 1) return true;
+        if (isInitialized == 0) return false;
+
+        memoizedIsInitialized = 1;
+        return true;
     }
 
     @Override
-    public final Builder mergeUnknownFields(
-        final com.google.protobuf.UnknownFieldSet unknownFields) {
-      return super.mergeUnknownFields(unknownFields);
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+        throws java.io.IOException {
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(host_)) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 1, host_);
+        }
+        if (messageRequestCase_ == 3) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 3, messageRequest_);
+        }
+        if (messageRequestCase_ == 4) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 4, messageRequest_);
+        }
+        if (messageRequestCase_ == 5) {
+            output.writeMessage(5, (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_);
+        }
+        if (messageRequestCase_ == 6) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 6, messageRequest_);
+        }
+        if (messageRequestCase_ == 7) {
+            com.google.protobuf.GeneratedMessageV3.writeString(output, 7, messageRequest_);
+        }
+        getUnknownFields().writeTo(output);
     }
 
-
-    // @@protoc_insertion_point(builder_scope:grpc.reflection.v1alpha.ServerReflectionRequest)
-  }
-
-  // @@protoc_insertion_point(class_scope:grpc.reflection.v1alpha.ServerReflectionRequest)
-  private static final io.grpc.reflection.v1alpha.ServerReflectionRequest DEFAULT_INSTANCE;
-  static {
-    DEFAULT_INSTANCE = new io.grpc.reflection.v1alpha.ServerReflectionRequest();
-  }
-
-  public static io.grpc.reflection.v1alpha.ServerReflectionRequest getDefaultInstance() {
-    return DEFAULT_INSTANCE;
-  }
-
-  private static final com.google.protobuf.Parser<ServerReflectionRequest>
-      PARSER = new com.google.protobuf.AbstractParser<ServerReflectionRequest>() {
     @Override
-    public ServerReflectionRequest parsePartialFrom(
-        com.google.protobuf.CodedInputStream input,
+    public int getSerializedSize() {
+        int size = memoizedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (!com.google.protobuf.GeneratedMessageV3.isStringEmpty(host_)) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, host_);
+        }
+        if (messageRequestCase_ == 3) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, messageRequest_);
+        }
+        if (messageRequestCase_ == 4) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, messageRequest_);
+        }
+        if (messageRequestCase_ == 5) {
+            size += com.google.protobuf.CodedOutputStream
+                .computeMessageSize(5, (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_);
+        }
+        if (messageRequestCase_ == 6) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(6, messageRequest_);
+        }
+        if (messageRequestCase_ == 7) {
+            size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, messageRequest_);
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSize = size;
+        return size;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof io.grpc.reflection.v1alpha.ServerReflectionRequest)) {
+            return super.equals(obj);
+        }
+        io.grpc.reflection.v1alpha.ServerReflectionRequest other = (io.grpc.reflection.v1alpha.ServerReflectionRequest) obj;
+
+        if (!getHost()
+            .equals(other.getHost())) return false;
+        if (!getMessageRequestCase().equals(other.getMessageRequestCase())) return false;
+        switch (messageRequestCase_) {
+            case 3:
+                if (!getFileByFilename()
+                    .equals(other.getFileByFilename())) return false;
+                break;
+            case 4:
+                if (!getFileContainingSymbol()
+                    .equals(other.getFileContainingSymbol())) return false;
+                break;
+            case 5:
+                if (!getFileContainingExtension()
+                    .equals(other.getFileContainingExtension())) return false;
+                break;
+            case 6:
+                if (!getAllExtensionNumbersOfType()
+                    .equals(other.getAllExtensionNumbersOfType())) return false;
+                break;
+            case 7:
+                if (!getListServices()
+                    .equals(other.getListServices())) return false;
+                break;
+            case 0:
+            default:
+        }
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        if (memoizedHashCode != 0) {
+            return memoizedHashCode;
+        }
+        int hash = 41;
+        hash = (19 * hash) + getDescriptor().hashCode();
+        hash = (37 * hash) + HOST_FIELD_NUMBER;
+        hash = (53 * hash) + getHost().hashCode();
+        switch (messageRequestCase_) {
+            case 3:
+                hash = (37 * hash) + FILE_BY_FILENAME_FIELD_NUMBER;
+                hash = (53 * hash) + getFileByFilename().hashCode();
+                break;
+            case 4:
+                hash = (37 * hash) + FILE_CONTAINING_SYMBOL_FIELD_NUMBER;
+                hash = (53 * hash) + getFileContainingSymbol().hashCode();
+                break;
+            case 5:
+                hash = (37 * hash) + FILE_CONTAINING_EXTENSION_FIELD_NUMBER;
+                hash = (53 * hash) + getFileContainingExtension().hashCode();
+                break;
+            case 6:
+                hash = (37 * hash) + ALL_EXTENSION_NUMBERS_OF_TYPE_FIELD_NUMBER;
+                hash = (53 * hash) + getAllExtensionNumbersOfType().hashCode();
+                break;
+            case 7:
+                hash = (37 * hash) + LIST_SERVICES_FIELD_NUMBER;
+                hash = (53 * hash) + getListServices().hashCode();
+                break;
+            case 0:
+            default:
+        }
+        hash = (29 * hash) + getUnknownFields().hashCode();
+        memoizedHashCode = hash;
+        return hash;
+    }
+
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      Builder builder = newBuilder();
-      try {
-        builder.mergeFrom(input, extensionRegistry);
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(builder.buildPartial());
-      } catch (com.google.protobuf.UninitializedMessageException e) {
-        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(e)
-            .setUnfinishedMessage(builder.buildPartial());
-      }
-      return builder.buildPartial();
+        return PARSER.parseFrom(data, extensionRegistry);
     }
-  };
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input);
+    }
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+        return com.google.protobuf.GeneratedMessageV3
+            .parseWithIOException(PARSER, input, extensionRegistry);
+    }
 
-  public static com.google.protobuf.Parser<ServerReflectionRequest> parser() {
-    return PARSER;
-  }
+    @Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+        return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(io.grpc.reflection.v1alpha.ServerReflectionRequest prototype) {
+        return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @Override
+    public Builder toBuilder() {
+        return this == DEFAULT_INSTANCE
+            ? new Builder() : new Builder().mergeFrom(this);
+    }
 
-  @Override
-  public com.google.protobuf.Parser<ServerReflectionRequest> getParserForType() {
-    return PARSER;
-  }
+    @Override
+    protected Builder newBuilderForType(
+        BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+    }
+    /**
+     * <pre>
+     * The message sent by the client when calling ServerReflectionInfo method.
+     * </pre>
+     *
+     * Protobuf type {@code grpc.reflection.v1alpha.ServerReflectionRequest}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:grpc.reflection.v1alpha.ServerReflectionRequest)
+        ServerReflectionRequestOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_descriptor;
+        }
 
-  @Override
-  public io.grpc.reflection.v1alpha.ServerReflectionRequest getDefaultInstanceForType() {
-    return DEFAULT_INSTANCE;
-  }
+        @Override
+        protected FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                    io.grpc.reflection.v1alpha.ServerReflectionRequest.class, io.grpc.reflection.v1alpha.ServerReflectionRequest.Builder.class);
+        }
+
+        // Construct using io.grpc.reflection.v1alpha.ServerReflectionRequest.newBuilder()
+        private Builder() {
+
+        }
+
+        private Builder(
+            BuilderParent parent) {
+            super(parent);
+
+        }
+        @Override
+        public Builder clear() {
+            super.clear();
+            bitField0_ = 0;
+            host_ = "";
+            if (fileContainingExtensionBuilder_ != null) {
+                fileContainingExtensionBuilder_.clear();
+            }
+            messageRequestCase_ = 0;
+            messageRequest_ = null;
+            return this;
+        }
+
+        @Override
+        public com.google.protobuf.Descriptors.Descriptor
+        getDescriptorForType() {
+            return io.grpc.reflection.v1alpha.ServerReflectionProto.internal_static_grpc_reflection_v1alpha_ServerReflectionRequest_descriptor;
+        }
+
+        @Override
+        public io.grpc.reflection.v1alpha.ServerReflectionRequest getDefaultInstanceForType() {
+            return getDefaultInstance();
+        }
+
+        @Override
+        public io.grpc.reflection.v1alpha.ServerReflectionRequest build() {
+            io.grpc.reflection.v1alpha.ServerReflectionRequest result = buildPartial();
+            if (!result.isInitialized()) {
+                throw newUninitializedMessageException(result);
+            }
+            return result;
+        }
+
+        @Override
+        public io.grpc.reflection.v1alpha.ServerReflectionRequest buildPartial() {
+            io.grpc.reflection.v1alpha.ServerReflectionRequest result = new io.grpc.reflection.v1alpha.ServerReflectionRequest(this);
+            if (bitField0_ != 0) { buildPartial0(result); }
+            buildPartialOneofs(result);
+            onBuilt();
+            return result;
+        }
+
+        private void buildPartial0(io.grpc.reflection.v1alpha.ServerReflectionRequest result) {
+            int from_bitField0_ = bitField0_;
+            if (((from_bitField0_ & 0x00000001) != 0)) {
+                result.host_ = host_;
+            }
+        }
+
+        private void buildPartialOneofs(io.grpc.reflection.v1alpha.ServerReflectionRequest result) {
+            result.messageRequestCase_ = messageRequestCase_;
+            result.messageRequest_ = this.messageRequest_;
+            if (messageRequestCase_ == 5 &&
+                fileContainingExtensionBuilder_ != null) {
+                result.messageRequest_ = fileContainingExtensionBuilder_.build();
+            }
+        }
+
+        @Override
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+            if (other instanceof io.grpc.reflection.v1alpha.ServerReflectionRequest) {
+                return mergeFrom((io.grpc.reflection.v1alpha.ServerReflectionRequest)other);
+            } else {
+                super.mergeFrom(other);
+                return this;
+            }
+        }
+
+        public Builder mergeFrom(io.grpc.reflection.v1alpha.ServerReflectionRequest other) {
+            if (other == getDefaultInstance()) return this;
+            if (!other.getHost().isEmpty()) {
+                host_ = other.host_;
+                bitField0_ |= 0x00000001;
+                onChanged();
+            }
+            switch (other.getMessageRequestCase()) {
+                case FILE_BY_FILENAME: {
+                    messageRequestCase_ = 3;
+                    messageRequest_ = other.messageRequest_;
+                    onChanged();
+                    break;
+                }
+                case FILE_CONTAINING_SYMBOL: {
+                    messageRequestCase_ = 4;
+                    messageRequest_ = other.messageRequest_;
+                    onChanged();
+                    break;
+                }
+                case FILE_CONTAINING_EXTENSION: {
+                    mergeFileContainingExtension(other.getFileContainingExtension());
+                    break;
+                }
+                case ALL_EXTENSION_NUMBERS_OF_TYPE: {
+                    messageRequestCase_ = 6;
+                    messageRequest_ = other.messageRequest_;
+                    onChanged();
+                    break;
+                }
+                case LIST_SERVICES: {
+                    messageRequestCase_ = 7;
+                    messageRequest_ = other.messageRequest_;
+                    onChanged();
+                    break;
+                }
+                case MESSAGEREQUEST_NOT_SET: {
+                    break;
+                }
+            }
+            this.mergeUnknownFields(other.getUnknownFields());
+            onChanged();
+            return this;
+        }
+
+        @Override
+        public final boolean isInitialized() {
+            return true;
+        }
+
+        @Override
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+            if (extensionRegistry == null) {
+                throw new NullPointerException();
+            }
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        case 10: {
+                            host_ = input.readStringRequireUtf8();
+                            bitField0_ |= 0x00000001;
+                            break;
+                        } // case 10
+                        case 26: {
+                            String s = input.readStringRequireUtf8();
+                            messageRequestCase_ = 3;
+                            messageRequest_ = s;
+                            break;
+                        } // case 26
+                        case 34: {
+                            String s = input.readStringRequireUtf8();
+                            messageRequestCase_ = 4;
+                            messageRequest_ = s;
+                            break;
+                        } // case 34
+                        case 42: {
+                            input.readMessage(
+                                getFileContainingExtensionFieldBuilder().getBuilder(),
+                                extensionRegistry);
+                            messageRequestCase_ = 5;
+                            break;
+                        } // case 42
+                        case 50: {
+                            String s = input.readStringRequireUtf8();
+                            messageRequestCase_ = 6;
+                            messageRequest_ = s;
+                            break;
+                        } // case 50
+                        case 58: {
+                            String s = input.readStringRequireUtf8();
+                            messageRequestCase_ = 7;
+                            messageRequest_ = s;
+                            break;
+                        } // case 58
+                        default: {
+                            if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                                done = true; // was an endgroup tag
+                            }
+                            break;
+                        } // default:
+                    } // switch (tag)
+                } // while (!done)
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.unwrapIOException();
+            } finally {
+                onChanged();
+            } // finally
+            return this;
+        }
+        private int messageRequestCase_ = 0;
+        private Object messageRequest_;
+        public MessageRequestCase
+        getMessageRequestCase() {
+            return MessageRequestCase.forNumber(
+                messageRequestCase_);
+        }
+
+        public Builder clearMessageRequest() {
+            messageRequestCase_ = 0;
+            messageRequest_ = null;
+            onChanged();
+            return this;
+        }
+
+        private int bitField0_;
+
+        private Object host_ = "";
+        /**
+         * <code>string host = 1;</code>
+         * @return The host.
+         */
+        public String getHost() {
+            Object ref = host_;
+            if (!(ref instanceof String)) {
+                com.google.protobuf.ByteString bs =
+                    (com.google.protobuf.ByteString) ref;
+                String s = bs.toStringUtf8();
+                host_ = s;
+                return s;
+            } else {
+                return (String) ref;
+            }
+        }
+        /**
+         * <code>string host = 1;</code>
+         * @return The bytes for host.
+         */
+        public com.google.protobuf.ByteString
+        getHostBytes() {
+            Object ref = host_;
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                    com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+                host_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+        /**
+         * <code>string host = 1;</code>
+         * @param value The host to set.
+         * @return This builder for chaining.
+         */
+        public Builder setHost(
+            String value) {
+            if (value == null) { throw new NullPointerException(); }
+            host_ = value;
+            bitField0_ |= 0x00000001;
+            onChanged();
+            return this;
+        }
+        /**
+         * <code>string host = 1;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearHost() {
+            host_ = getDefaultInstance().getHost();
+            bitField0_ = (bitField0_ & ~0x00000001);
+            onChanged();
+            return this;
+        }
+        /**
+         * <code>string host = 1;</code>
+         * @param value The bytes for host to set.
+         * @return This builder for chaining.
+         */
+        public Builder setHostBytes(
+            com.google.protobuf.ByteString value) {
+            if (value == null) { throw new NullPointerException(); }
+            checkByteStringIsUtf8(value);
+            host_ = value;
+            bitField0_ |= 0x00000001;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <pre>
+         * Find a proto file by the file name.
+         * </pre>
+         *
+         * <code>string file_by_filename = 3;</code>
+         * @return Whether the fileByFilename field is set.
+         */
+        @Override
+        public boolean hasFileByFilename() {
+            return messageRequestCase_ == 3;
+        }
+        /**
+         * <pre>
+         * Find a proto file by the file name.
+         * </pre>
+         *
+         * <code>string file_by_filename = 3;</code>
+         * @return The fileByFilename.
+         */
+        @Override
+        public String getFileByFilename() {
+            Object ref = "";
+            if (messageRequestCase_ == 3) {
+                ref = messageRequest_;
+            }
+            if (!(ref instanceof String)) {
+                com.google.protobuf.ByteString bs =
+                    (com.google.protobuf.ByteString) ref;
+                String s = bs.toStringUtf8();
+                if (messageRequestCase_ == 3) {
+                    messageRequest_ = s;
+                }
+                return s;
+            } else {
+                return (String) ref;
+            }
+        }
+        /**
+         * <pre>
+         * Find a proto file by the file name.
+         * </pre>
+         *
+         * <code>string file_by_filename = 3;</code>
+         * @return The bytes for fileByFilename.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getFileByFilenameBytes() {
+            Object ref = "";
+            if (messageRequestCase_ == 3) {
+                ref = messageRequest_;
+            }
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                    com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+                if (messageRequestCase_ == 3) {
+                    messageRequest_ = b;
+                }
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+        /**
+         * <pre>
+         * Find a proto file by the file name.
+         * </pre>
+         *
+         * <code>string file_by_filename = 3;</code>
+         * @param value The fileByFilename to set.
+         * @return This builder for chaining.
+         */
+        public Builder setFileByFilename(
+            String value) {
+            if (value == null) { throw new NullPointerException(); }
+            messageRequestCase_ = 3;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+        /**
+         * <pre>
+         * Find a proto file by the file name.
+         * </pre>
+         *
+         * <code>string file_by_filename = 3;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearFileByFilename() {
+            if (messageRequestCase_ == 3) {
+                messageRequestCase_ = 0;
+                messageRequest_ = null;
+                onChanged();
+            }
+            return this;
+        }
+        /**
+         * <pre>
+         * Find a proto file by the file name.
+         * </pre>
+         *
+         * <code>string file_by_filename = 3;</code>
+         * @param value The bytes for fileByFilename to set.
+         * @return This builder for chaining.
+         */
+        public Builder setFileByFilenameBytes(
+            com.google.protobuf.ByteString value) {
+            if (value == null) { throw new NullPointerException(); }
+            checkByteStringIsUtf8(value);
+            messageRequestCase_ = 3;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <pre>
+         * Find the proto file that declares the given fully-qualified symbol name.
+         * This field should be a fully-qualified symbol name
+         * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
+         * </pre>
+         *
+         * <code>string file_containing_symbol = 4;</code>
+         * @return Whether the fileContainingSymbol field is set.
+         */
+        @Override
+        public boolean hasFileContainingSymbol() {
+            return messageRequestCase_ == 4;
+        }
+        /**
+         * <pre>
+         * Find the proto file that declares the given fully-qualified symbol name.
+         * This field should be a fully-qualified symbol name
+         * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
+         * </pre>
+         *
+         * <code>string file_containing_symbol = 4;</code>
+         * @return The fileContainingSymbol.
+         */
+        @Override
+        public String getFileContainingSymbol() {
+            Object ref = "";
+            if (messageRequestCase_ == 4) {
+                ref = messageRequest_;
+            }
+            if (!(ref instanceof String)) {
+                com.google.protobuf.ByteString bs =
+                    (com.google.protobuf.ByteString) ref;
+                String s = bs.toStringUtf8();
+                if (messageRequestCase_ == 4) {
+                    messageRequest_ = s;
+                }
+                return s;
+            } else {
+                return (String) ref;
+            }
+        }
+        /**
+         * <pre>
+         * Find the proto file that declares the given fully-qualified symbol name.
+         * This field should be a fully-qualified symbol name
+         * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
+         * </pre>
+         *
+         * <code>string file_containing_symbol = 4;</code>
+         * @return The bytes for fileContainingSymbol.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getFileContainingSymbolBytes() {
+            Object ref = "";
+            if (messageRequestCase_ == 4) {
+                ref = messageRequest_;
+            }
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                    com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+                if (messageRequestCase_ == 4) {
+                    messageRequest_ = b;
+                }
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+        /**
+         * <pre>
+         * Find the proto file that declares the given fully-qualified symbol name.
+         * This field should be a fully-qualified symbol name
+         * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
+         * </pre>
+         *
+         * <code>string file_containing_symbol = 4;</code>
+         * @param value The fileContainingSymbol to set.
+         * @return This builder for chaining.
+         */
+        public Builder setFileContainingSymbol(
+            String value) {
+            if (value == null) { throw new NullPointerException(); }
+            messageRequestCase_ = 4;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+        /**
+         * <pre>
+         * Find the proto file that declares the given fully-qualified symbol name.
+         * This field should be a fully-qualified symbol name
+         * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
+         * </pre>
+         *
+         * <code>string file_containing_symbol = 4;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearFileContainingSymbol() {
+            if (messageRequestCase_ == 4) {
+                messageRequestCase_ = 0;
+                messageRequest_ = null;
+                onChanged();
+            }
+            return this;
+        }
+        /**
+         * <pre>
+         * Find the proto file that declares the given fully-qualified symbol name.
+         * This field should be a fully-qualified symbol name
+         * (e.g. &lt;package&gt;.&lt;service&gt;[.&lt;method&gt;] or &lt;package&gt;.&lt;type&gt;).
+         * </pre>
+         *
+         * <code>string file_containing_symbol = 4;</code>
+         * @param value The bytes for fileContainingSymbol to set.
+         * @return This builder for chaining.
+         */
+        public Builder setFileContainingSymbolBytes(
+            com.google.protobuf.ByteString value) {
+            if (value == null) { throw new NullPointerException(); }
+            checkByteStringIsUtf8(value);
+            messageRequestCase_ = 4;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+
+        private com.google.protobuf.SingleFieldBuilderV3<
+            io.grpc.reflection.v1alpha.ExtensionRequest, io.grpc.reflection.v1alpha.ExtensionRequest.Builder, io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder> fileContainingExtensionBuilder_;
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         * @return Whether the fileContainingExtension field is set.
+         */
+        @Override
+        public boolean hasFileContainingExtension() {
+            return messageRequestCase_ == 5;
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         * @return The fileContainingExtension.
+         */
+        @Override
+        public io.grpc.reflection.v1alpha.ExtensionRequest getFileContainingExtension() {
+            if (fileContainingExtensionBuilder_ == null) {
+                if (messageRequestCase_ == 5) {
+                    return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
+                }
+                return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
+            } else {
+                if (messageRequestCase_ == 5) {
+                    return fileContainingExtensionBuilder_.getMessage();
+                }
+                return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
+            }
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        public Builder setFileContainingExtension(io.grpc.reflection.v1alpha.ExtensionRequest value) {
+            if (fileContainingExtensionBuilder_ == null) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+                messageRequest_ = value;
+                onChanged();
+            } else {
+                fileContainingExtensionBuilder_.setMessage(value);
+            }
+            messageRequestCase_ = 5;
+            return this;
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        public Builder setFileContainingExtension(
+            io.grpc.reflection.v1alpha.ExtensionRequest.Builder builderForValue) {
+            if (fileContainingExtensionBuilder_ == null) {
+                messageRequest_ = builderForValue.build();
+                onChanged();
+            } else {
+                fileContainingExtensionBuilder_.setMessage(builderForValue.build());
+            }
+            messageRequestCase_ = 5;
+            return this;
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        public Builder mergeFileContainingExtension(io.grpc.reflection.v1alpha.ExtensionRequest value) {
+            if (fileContainingExtensionBuilder_ == null) {
+                if (messageRequestCase_ == 5 &&
+                    messageRequest_ != io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance()) {
+                    messageRequest_ = io.grpc.reflection.v1alpha.ExtensionRequest.newBuilder((io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_)
+                        .mergeFrom(value).buildPartial();
+                } else {
+                    messageRequest_ = value;
+                }
+                onChanged();
+            } else {
+                if (messageRequestCase_ == 5) {
+                    fileContainingExtensionBuilder_.mergeFrom(value);
+                } else {
+                    fileContainingExtensionBuilder_.setMessage(value);
+                }
+            }
+            messageRequestCase_ = 5;
+            return this;
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        public Builder clearFileContainingExtension() {
+            if (fileContainingExtensionBuilder_ == null) {
+                if (messageRequestCase_ == 5) {
+                    messageRequestCase_ = 0;
+                    messageRequest_ = null;
+                    onChanged();
+                }
+            } else {
+                if (messageRequestCase_ == 5) {
+                    messageRequestCase_ = 0;
+                    messageRequest_ = null;
+                }
+                fileContainingExtensionBuilder_.clear();
+            }
+            return this;
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        public io.grpc.reflection.v1alpha.ExtensionRequest.Builder getFileContainingExtensionBuilder() {
+            return getFileContainingExtensionFieldBuilder().getBuilder();
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        @Override
+        public io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder getFileContainingExtensionOrBuilder() {
+            if ((messageRequestCase_ == 5) && (fileContainingExtensionBuilder_ != null)) {
+                return fileContainingExtensionBuilder_.getMessageOrBuilder();
+            } else {
+                if (messageRequestCase_ == 5) {
+                    return (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_;
+                }
+                return io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
+            }
+        }
+        /**
+         * <pre>
+         * Find the proto file which defines an extension extending the given
+         * message type with the given field number.
+         * </pre>
+         *
+         * <code>.grpc.reflection.v1alpha.ExtensionRequest file_containing_extension = 5;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilderV3<
+            io.grpc.reflection.v1alpha.ExtensionRequest, io.grpc.reflection.v1alpha.ExtensionRequest.Builder, io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder>
+        getFileContainingExtensionFieldBuilder() {
+            if (fileContainingExtensionBuilder_ == null) {
+                if (!(messageRequestCase_ == 5)) {
+                    messageRequest_ = io.grpc.reflection.v1alpha.ExtensionRequest.getDefaultInstance();
+                }
+                fileContainingExtensionBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+                    io.grpc.reflection.v1alpha.ExtensionRequest, io.grpc.reflection.v1alpha.ExtensionRequest.Builder, io.grpc.reflection.v1alpha.ExtensionRequestOrBuilder>(
+                    (io.grpc.reflection.v1alpha.ExtensionRequest) messageRequest_,
+                    getParentForChildren(),
+                    isClean());
+                messageRequest_ = null;
+            }
+            messageRequestCase_ = 5;
+            onChanged();
+            return fileContainingExtensionBuilder_;
+        }
+
+        /**
+         * <pre>
+         * Finds the tag numbers used by all known extensions of extendee_type, and
+         * appends them to ExtensionNumberResponse in an undefined order.
+         * Its corresponding method is best-effort: it's not guaranteed that the
+         * reflection service will implement this method, and it's not guaranteed
+         * that this method will provide all extensions. Returns
+         * StatusCode::UNIMPLEMENTED if it's not implemented.
+         * This field should be a fully-qualified type name. The format is
+         * &lt;package&gt;.&lt;type&gt;
+         * </pre>
+         *
+         * <code>string all_extension_numbers_of_type = 6;</code>
+         * @return Whether the allExtensionNumbersOfType field is set.
+         */
+        @Override
+        public boolean hasAllExtensionNumbersOfType() {
+            return messageRequestCase_ == 6;
+        }
+        /**
+         * <pre>
+         * Finds the tag numbers used by all known extensions of extendee_type, and
+         * appends them to ExtensionNumberResponse in an undefined order.
+         * Its corresponding method is best-effort: it's not guaranteed that the
+         * reflection service will implement this method, and it's not guaranteed
+         * that this method will provide all extensions. Returns
+         * StatusCode::UNIMPLEMENTED if it's not implemented.
+         * This field should be a fully-qualified type name. The format is
+         * &lt;package&gt;.&lt;type&gt;
+         * </pre>
+         *
+         * <code>string all_extension_numbers_of_type = 6;</code>
+         * @return The allExtensionNumbersOfType.
+         */
+        @Override
+        public String getAllExtensionNumbersOfType() {
+            Object ref = "";
+            if (messageRequestCase_ == 6) {
+                ref = messageRequest_;
+            }
+            if (!(ref instanceof String)) {
+                com.google.protobuf.ByteString bs =
+                    (com.google.protobuf.ByteString) ref;
+                String s = bs.toStringUtf8();
+                if (messageRequestCase_ == 6) {
+                    messageRequest_ = s;
+                }
+                return s;
+            } else {
+                return (String) ref;
+            }
+        }
+        /**
+         * <pre>
+         * Finds the tag numbers used by all known extensions of extendee_type, and
+         * appends them to ExtensionNumberResponse in an undefined order.
+         * Its corresponding method is best-effort: it's not guaranteed that the
+         * reflection service will implement this method, and it's not guaranteed
+         * that this method will provide all extensions. Returns
+         * StatusCode::UNIMPLEMENTED if it's not implemented.
+         * This field should be a fully-qualified type name. The format is
+         * &lt;package&gt;.&lt;type&gt;
+         * </pre>
+         *
+         * <code>string all_extension_numbers_of_type = 6;</code>
+         * @return The bytes for allExtensionNumbersOfType.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getAllExtensionNumbersOfTypeBytes() {
+            Object ref = "";
+            if (messageRequestCase_ == 6) {
+                ref = messageRequest_;
+            }
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                    com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+                if (messageRequestCase_ == 6) {
+                    messageRequest_ = b;
+                }
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+        /**
+         * <pre>
+         * Finds the tag numbers used by all known extensions of extendee_type, and
+         * appends them to ExtensionNumberResponse in an undefined order.
+         * Its corresponding method is best-effort: it's not guaranteed that the
+         * reflection service will implement this method, and it's not guaranteed
+         * that this method will provide all extensions. Returns
+         * StatusCode::UNIMPLEMENTED if it's not implemented.
+         * This field should be a fully-qualified type name. The format is
+         * &lt;package&gt;.&lt;type&gt;
+         * </pre>
+         *
+         * <code>string all_extension_numbers_of_type = 6;</code>
+         * @param value The allExtensionNumbersOfType to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAllExtensionNumbersOfType(
+            String value) {
+            if (value == null) { throw new NullPointerException(); }
+            messageRequestCase_ = 6;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+        /**
+         * <pre>
+         * Finds the tag numbers used by all known extensions of extendee_type, and
+         * appends them to ExtensionNumberResponse in an undefined order.
+         * Its corresponding method is best-effort: it's not guaranteed that the
+         * reflection service will implement this method, and it's not guaranteed
+         * that this method will provide all extensions. Returns
+         * StatusCode::UNIMPLEMENTED if it's not implemented.
+         * This field should be a fully-qualified type name. The format is
+         * &lt;package&gt;.&lt;type&gt;
+         * </pre>
+         *
+         * <code>string all_extension_numbers_of_type = 6;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearAllExtensionNumbersOfType() {
+            if (messageRequestCase_ == 6) {
+                messageRequestCase_ = 0;
+                messageRequest_ = null;
+                onChanged();
+            }
+            return this;
+        }
+        /**
+         * <pre>
+         * Finds the tag numbers used by all known extensions of extendee_type, and
+         * appends them to ExtensionNumberResponse in an undefined order.
+         * Its corresponding method is best-effort: it's not guaranteed that the
+         * reflection service will implement this method, and it's not guaranteed
+         * that this method will provide all extensions. Returns
+         * StatusCode::UNIMPLEMENTED if it's not implemented.
+         * This field should be a fully-qualified type name. The format is
+         * &lt;package&gt;.&lt;type&gt;
+         * </pre>
+         *
+         * <code>string all_extension_numbers_of_type = 6;</code>
+         * @param value The bytes for allExtensionNumbersOfType to set.
+         * @return This builder for chaining.
+         */
+        public Builder setAllExtensionNumbersOfTypeBytes(
+            com.google.protobuf.ByteString value) {
+            if (value == null) { throw new NullPointerException(); }
+            checkByteStringIsUtf8(value);
+            messageRequestCase_ = 6;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <pre>
+         * List the full names of registered services. The content will not be
+         * checked.
+         * </pre>
+         *
+         * <code>string list_services = 7;</code>
+         * @return Whether the listServices field is set.
+         */
+        @Override
+        public boolean hasListServices() {
+            return messageRequestCase_ == 7;
+        }
+        /**
+         * <pre>
+         * List the full names of registered services. The content will not be
+         * checked.
+         * </pre>
+         *
+         * <code>string list_services = 7;</code>
+         * @return The listServices.
+         */
+        @Override
+        public String getListServices() {
+            Object ref = "";
+            if (messageRequestCase_ == 7) {
+                ref = messageRequest_;
+            }
+            if (!(ref instanceof String)) {
+                com.google.protobuf.ByteString bs =
+                    (com.google.protobuf.ByteString) ref;
+                String s = bs.toStringUtf8();
+                if (messageRequestCase_ == 7) {
+                    messageRequest_ = s;
+                }
+                return s;
+            } else {
+                return (String) ref;
+            }
+        }
+        /**
+         * <pre>
+         * List the full names of registered services. The content will not be
+         * checked.
+         * </pre>
+         *
+         * <code>string list_services = 7;</code>
+         * @return The bytes for listServices.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getListServicesBytes() {
+            Object ref = "";
+            if (messageRequestCase_ == 7) {
+                ref = messageRequest_;
+            }
+            if (ref instanceof String) {
+                com.google.protobuf.ByteString b =
+                    com.google.protobuf.ByteString.copyFromUtf8(
+                        (String) ref);
+                if (messageRequestCase_ == 7) {
+                    messageRequest_ = b;
+                }
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+            }
+        }
+        /**
+         * <pre>
+         * List the full names of registered services. The content will not be
+         * checked.
+         * </pre>
+         *
+         * <code>string list_services = 7;</code>
+         * @param value The listServices to set.
+         * @return This builder for chaining.
+         */
+        public Builder setListServices(
+            String value) {
+            if (value == null) { throw new NullPointerException(); }
+            messageRequestCase_ = 7;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+        /**
+         * <pre>
+         * List the full names of registered services. The content will not be
+         * checked.
+         * </pre>
+         *
+         * <code>string list_services = 7;</code>
+         * @return This builder for chaining.
+         */
+        public Builder clearListServices() {
+            if (messageRequestCase_ == 7) {
+                messageRequestCase_ = 0;
+                messageRequest_ = null;
+                onChanged();
+            }
+            return this;
+        }
+        /**
+         * <pre>
+         * List the full names of registered services. The content will not be
+         * checked.
+         * </pre>
+         *
+         * <code>string list_services = 7;</code>
+         * @param value The bytes for listServices to set.
+         * @return This builder for chaining.
+         */
+        public Builder setListServicesBytes(
+            com.google.protobuf.ByteString value) {
+            if (value == null) { throw new NullPointerException(); }
+            checkByteStringIsUtf8(value);
+            messageRequestCase_ = 7;
+            messageRequest_ = value;
+            onChanged();
+            return this;
+        }
+        @Override
+        public final Builder setUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return super.setUnknownFields(unknownFields);
+        }
+
+        @Override
+        public final Builder mergeUnknownFields(
+            final com.google.protobuf.UnknownFieldSet unknownFields) {
+            return super.mergeUnknownFields(unknownFields);
+        }
+
+
+        // @@protoc_insertion_point(builder_scope:grpc.reflection.v1alpha.ServerReflectionRequest)
+    }
+
+    // @@protoc_insertion_point(class_scope:grpc.reflection.v1alpha.ServerReflectionRequest)
+    private static final io.grpc.reflection.v1alpha.ServerReflectionRequest DEFAULT_INSTANCE;
+    static {
+        DEFAULT_INSTANCE = new io.grpc.reflection.v1alpha.ServerReflectionRequest();
+    }
+
+    public static io.grpc.reflection.v1alpha.ServerReflectionRequest getDefaultInstance() {
+        return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ServerReflectionRequest>
+        PARSER = new com.google.protobuf.AbstractParser<ServerReflectionRequest>() {
+        @Override
+        public ServerReflectionRequest parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+            Builder builder = newBuilder();
+            try {
+                builder.mergeFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(builder.buildPartial());
+            } catch (com.google.protobuf.UninitializedMessageException e) {
+                throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                    .setUnfinishedMessage(builder.buildPartial());
+            }
+            return builder.buildPartial();
+        }
+    };
+
+    public static com.google.protobuf.Parser<ServerReflectionRequest> parser() {
+        return PARSER;
+    }
+
+    @Override
+    public com.google.protobuf.Parser<ServerReflectionRequest> getParserForType() {
+        return PARSER;
+    }
+
+    @Override
+    public io.grpc.reflection.v1alpha.ServerReflectionRequest getDefaultInstanceForType() {
+        return DEFAULT_INSTANCE;
+    }
 
 }
 

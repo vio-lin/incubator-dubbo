@@ -7,42 +7,42 @@ public interface ExtensionNumberResponseOrBuilder extends
     // @@protoc_insertion_point(interface_extends:grpc.reflection.v1alpha.ExtensionNumberResponse)
     com.google.protobuf.MessageOrBuilder {
 
-  /**
-   * <pre>
-   * Full name of the base type, including the package name. The format
-   * is &lt;package&gt;.&lt;type&gt;
-   * </pre>
-   *
-   * <code>string base_type_name = 1;</code>
-   * @return The baseTypeName.
-   */
-  String getBaseTypeName();
-  /**
-   * <pre>
-   * Full name of the base type, including the package name. The format
-   * is &lt;package&gt;.&lt;type&gt;
-   * </pre>
-   *
-   * <code>string base_type_name = 1;</code>
-   * @return The bytes for baseTypeName.
-   */
-  com.google.protobuf.ByteString
-      getBaseTypeNameBytes();
+    /**
+     * <pre>
+     * Full name of the base type, including the package name. The format
+     * is &lt;package&gt;.&lt;type&gt;
+     * </pre>
+     *
+     * <code>string base_type_name = 1;</code>
+     * @return The baseTypeName.
+     */
+    String getBaseTypeName();
+    /**
+     * <pre>
+     * Full name of the base type, including the package name. The format
+     * is &lt;package&gt;.&lt;type&gt;
+     * </pre>
+     *
+     * <code>string base_type_name = 1;</code>
+     * @return The bytes for baseTypeName.
+     */
+    com.google.protobuf.ByteString
+    getBaseTypeNameBytes();
 
-  /**
-   * <code>repeated int32 extension_number = 2;</code>
-   * @return A list containing the extensionNumber.
-   */
-  java.util.List<Integer> getExtensionNumberList();
-  /**
-   * <code>repeated int32 extension_number = 2;</code>
-   * @return The count of extensionNumber.
-   */
-  int getExtensionNumberCount();
-  /**
-   * <code>repeated int32 extension_number = 2;</code>
-   * @param index The index of the element to return.
-   * @return The extensionNumber at the given index.
-   */
-  int getExtensionNumber(int index);
+    /**
+     * <code>repeated int32 extension_number = 2;</code>
+     * @return A list containing the extensionNumber.
+     */
+    java.util.List<Integer> getExtensionNumberList();
+    /**
+     * <code>repeated int32 extension_number = 2;</code>
+     * @return The count of extensionNumber.
+     */
+    int getExtensionNumberCount();
+    /**
+     * <code>repeated int32 extension_number = 2;</code>
+     * @param index The index of the element to return.
+     * @return The extensionNumber at the given index.
+     */
+    int getExtensionNumber(int index);
 }
