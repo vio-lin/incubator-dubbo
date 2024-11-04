@@ -207,7 +207,7 @@ public class RpcUtils {
 
     // check parameterTypesDesc to fix CVE-2020-1948
     public static boolean isGenericCall(String parameterTypesDesc, String method) {
-        return method.startsWith("$")||(($INVOKE.equals(method) || $INVOKE_ASYNC.equals(method)) && GENERIC_PARAMETER_DESC.equals(parameterTypesDesc));
+        return ($INVOKE.equals(method) || $INVOKE_ASYNC.equals(method)) && GENERIC_PARAMETER_DESC.equals(parameterTypesDesc);
     }
 
     // check parameterTypesDesc to fix CVE-2020-1948
