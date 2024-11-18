@@ -27,6 +27,8 @@ import org.mockito.Mockito;
 
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
+
 class ReflectionServiceDescriptorTest {
 
     private final ReflectionServiceDescriptor service = new ReflectionServiceDescriptor(DemoService.class);
@@ -38,6 +40,16 @@ class ReflectionServiceDescriptorTest {
         when(method.getMethodName()).thenReturn("sayHello2");
         service2.addMethod(method);
         Assertions.assertEquals(1, service2.getMethods("sayHello2").size());
+    }
+
+    @Test
+    void addMethodWithParamSec() throws NoSuchMethodException {
+        ReflectionServiceDescriptor service2 = new ReflectionServiceDescriptor(DemoService.class);
+        Method method = ReflectionServiceDescriptorTest.class.getDeclaredMethod("testEchoMethod", String.class);
+        MethodDescriptor methodDescriptor = new ReflectionMethodDescriptor(method);
+        service2.addMethod(methodDescriptor);
+        Assertions.assertEquals(1, service2.getMethods("testEchoMethod").size());
+        Assertions.assertEquals(methodDescriptor, service2.getMethod("testEchoMethod", methodDescriptor.getParamDesc()));
     }
 
     @Test
@@ -98,5 +110,10 @@ class ReflectionServiceDescriptorTest {
         ReflectionServiceDescriptor service2 = new ReflectionServiceDescriptor(DemoService.class);
         ReflectionServiceDescriptor service3 = new ReflectionServiceDescriptor(DemoService.class);
         Assertions.assertEquals(service2.hashCode(), service3.hashCode());
+    }
+
+    @SuppressWarnings("unused")
+    public String testEchoMethod(String someParam) {
+        return someParam;
     }
 }

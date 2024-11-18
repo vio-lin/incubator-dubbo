@@ -48,8 +48,9 @@ public class ReflectionServiceDescriptor implements ServiceDescriptor {
     }
 
     public void addMethod(MethodDescriptor methodDescriptor) {
-        methods.computeIfAbsent(methodDescriptor.getMethodName(), k -> new ArrayList<>(1))
-                .add(methodDescriptor);
+        methods.computeIfAbsent(methodDescriptor.getMethodName(), k -> new ArrayList<>(1)).add(methodDescriptor);
+        descToMethods.computeIfAbsent(methodDescriptor.getMethodName(), k -> new HashMap<>(1))
+                .put(methodDescriptor.getParamDesc(), methodDescriptor);
     }
 
     public ReflectionServiceDescriptor(Class<?> interfaceClass) {
