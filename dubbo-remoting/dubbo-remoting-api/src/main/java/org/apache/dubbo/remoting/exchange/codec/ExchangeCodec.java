@@ -208,7 +208,7 @@ public class ExchangeCodec extends TelnetCodec {
     }
 
     protected void encodeRequest(Channel channel, ChannelBuffer buffer, Request req) throws IOException {
-        Serialization serialization = getSerialization(channel);
+        Serialization serialization = getSerialization(channel,req);
         // header.
         byte[] header = new byte[HEADER_LENGTH];
         // set magic number.
@@ -256,7 +256,7 @@ public class ExchangeCodec extends TelnetCodec {
     protected void encodeResponse(Channel channel, ChannelBuffer buffer, Response res) throws IOException {
         int savedWriteIndex = buffer.writerIndex();
         try {
-            Serialization serialization = getSerialization(channel);
+            Serialization serialization = getSerialization(channel, res);
             // header.
             byte[] header = new byte[HEADER_LENGTH];
             // set magic number.
