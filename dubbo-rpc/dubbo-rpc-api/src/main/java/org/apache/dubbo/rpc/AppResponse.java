@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.rpc;
 
+import static org.apache.dubbo.rpc.Constants.INVOCATION_KEY;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +57,13 @@ public class AppResponse implements Result {
 
     private Map<String, Object> attachments = new HashMap<>();
 
+    private final Map<String, Object> attributes = new HashMap<>();
+
     public AppResponse() {
+    }
+
+    public AppResponse(Invocation invocation) {
+        this.setAttribute(INVOCATION_KEY, invocation);
     }
 
     public AppResponse(Object result) {
@@ -139,6 +147,14 @@ public class AppResponse implements Result {
     @Override
     public void setObjectAttachments(Map<String, Object> map) {
         this.attachments = map == null ? new HashMap<>() : map;
+    }
+
+    public Object getAttribute(String key) {
+        return attributes.get(key);
+    }
+
+    public void setAttribute(String key, Object value) {
+        attributes.put(key, value);
     }
 
     public void addAttachments(Map<String, String> map) {

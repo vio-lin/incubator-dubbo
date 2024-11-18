@@ -17,8 +17,12 @@
 
 package org.apache.dubbo.remoting.utils;
 
+import static org.apache.dubbo.remoting.Constants.DEFAULT_REMOTING_SERIALIZATION;
+import static org.apache.dubbo.remoting.Constants.SERIALIZATION_KEY;
+
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.remoting.Constants;
+import org.apache.dubbo.remoting.transport.CodecSupport;
 
 public class UrlUtils {
     public static int getIdleTimeout(URL url) {
@@ -33,5 +37,23 @@ public class UrlUtils {
 
     public static int getHeartbeat(URL url) {
         return url.getParameter(Constants.HEARTBEAT_KEY, Constants.DEFAULT_HEARTBEAT);
+    }
+
+    /**
+     * Get the serialization id
+     *
+     * @param url url
+     * @return {@link Byte}
+     */
+    public static Byte serializationId(URL url) {
+        Byte serializationId;
+
+        // Secondly, obtain the value from serialization
+        if ((serializationId = CodecSupport.getIDByName(url.getParameter(Constants.SERIALIZATION_KEY, Constants.DEFAULT_REMOTING_SERIALIZATION))) != null) {
+            return serializationId;
+        }
+
+        // Finally, use the default serialization type
+        return CodecSupport.getIDByName(DEFAULT_REMOTING_SERIALIZATION);
     }
 }

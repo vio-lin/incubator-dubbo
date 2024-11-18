@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.rpc.protocol;
 
+import static org.apache.dubbo.rpc.Constants.SERIALIZATION_ID_KEY;
+
 import org.apache.dubbo.common.URL;
 import org.apache.dubbo.common.Version;
 import org.apache.dubbo.common.extension.ExtensionLoader;
@@ -26,6 +28,7 @@ import org.apache.dubbo.common.threadpool.manager.ExecutorRepository;
 import org.apache.dubbo.common.utils.ArrayUtils;
 import org.apache.dubbo.common.utils.CollectionUtils;
 import org.apache.dubbo.common.utils.NetUtils;
+import org.apache.dubbo.remoting.utils.UrlUtils;
 import org.apache.dubbo.rpc.AsyncRpcResult;
 import org.apache.dubbo.rpc.Invocation;
 import org.apache.dubbo.rpc.InvokeMode;
@@ -157,6 +160,7 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
 
         invocation.setInvokeMode(RpcUtils.getInvokeMode(url, invocation));
         RpcUtils.attachInvocationIdIfAsync(getUrl(), invocation);
+        attachInvocationSerializationId(invocation);
 
         AsyncRpcResult asyncResult;
         try {
@@ -183,6 +187,27 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
         RpcContext.getContext().setFuture(new FutureAdapter(asyncResult.getResponseFuture()));
         return asyncResult;
     }
+
+    /**
+     * Attach Invocation Serialization id
+     * <p>
+     *     <ol>
+     *         <li>Obtain the value from <code>prefer_serialization</code></li>
+     *         <li>If the preceding information is not obtained, obtain the value from <code>serialization</code></li>
+     *         <li>If neither is obtained, use the default value</li>
+     *     </ol>
+     * </p>
+     *
+     * @param inv inv
+     */
+    private void attachInvocationSerializationId(RpcInvocation inv) {
+        Byte serializationId = UrlUtils.serializationId(getUrl());
+
+        if (serializationId != null) {
+            inv.put(SERIALIZATION_ID_KEY, serializationId);
+        }
+    }
+
 
     protected ExecutorService getCallbackExecutor(URL url, Invocation inv) {
         ExecutorService sharedExecutor = ExtensionLoader.getExtensionLoader(ExecutorRepository.class).getDefaultExtension().getExecutor(url);
