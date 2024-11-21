@@ -215,20 +215,4 @@ public class DubboCodec extends ExchangeCodec {
             out.writeAttachments(result.getObjectAttachments());
         }
     }
-
-    @Override
-    protected Serialization getSerialization(Channel channel, Request req) {
-        if (!(req.getData() instanceof Invocation)) {
-            return super.getSerialization(channel, req);
-        }
-        return DubboCodecSupport.getRequestSerialization(channel.getUrl(), (Invocation) req.getData());
-    }
-
-    @Override
-    protected Serialization getSerialization(Channel channel, Response res) {
-        if (!(res.getResult() instanceof AppResponse)) {
-            return super.getSerialization(channel, res);
-        }
-        return DubboCodecSupport.getResponseSerialization(channel.getUrl(), (AppResponse) res.getResult());
-    }
 }
